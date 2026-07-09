@@ -1,0 +1,25 @@
+# Ignorar as próprias configurações do git
+.git/
+.gitignore
+
+# Ignorar o README e docs, o contêiner não precisa ler isso
+README.md
+docs/
+
+# Ignorar pastas de dependências locais (o Docker vai instalar as dele dentro do contêiner)
+**/node_modules/
+**/venv/
+**/.venv/
+**/__pycache__/
+
+# Ignorar builds locais
+**/target/
+**/dist/
+
+# Ignorar arquivos de IDE e logs
+**/.vscode/
+**/.idea/
+*.log
+
+# não copiar o arquivo para dentro da imagem
+.env

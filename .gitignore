@@ -1,0 +1,53 @@
+# ========================
+# Variáveis de Ambiente e Segurança
+# ========================
+.env
+.env.local
+*.pem
+*.key
+
+# ========================
+# Front-End (Vue.js)
+# ========================
+frontend/node_modules/
+frontend/dist/
+frontend/.npm/
+npm-debug.log*
+yarn-error.log*
+
+# ========================
+# Back-End (Java / Spring Boot)
+# ========================
+backend-api/target/
+backend-api/bin/
+backend-api/.mvn/
+*.class
+*.jar
+*.war
+
+# ========================
+# Microsserviço e Data Science (Python)
+# ========================
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.venv/
+env/
+.pytest_cache/
+.ipynb_checkpoints/
+
+# ========================
+# Dados (Ignorar datasets grandes, subir apenas amostras se necessário)
+# ========================
+data-science/*.csv
+data-science/*.dat
+!data-science/amostra_dados.csv  # O "!" força o git a aceitar esse arquivo específico
+
+# ========================
+# Arquivos de IDE e SO
+# ========================
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

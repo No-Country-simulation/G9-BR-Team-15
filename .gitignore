@@ -51,3 +51,11 @@ data-science/*.dat
 .idea/
 .DS_Store
 Thumbs.db
+
+# Pastas geradas pelo Docker para persistência de dados do banco
+.docker/
+mysql_data/
+
+# Arquivos temporários do Sistema Operacional
+.DS_Store
+Thumbs.db

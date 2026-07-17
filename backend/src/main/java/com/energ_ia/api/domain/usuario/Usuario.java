@@ -1,14 +1,25 @@
-package com.energ_ia.api.modelos;
+package com.energ_ia.api.domain.usuario;
 
+import com.energ_ia.api.domain.cliente.Cliente;
 import jakarta.persistence.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
 @Table(name = "Usuario")
+@Getter
+@Setter
+@NoArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Include
     private Long id;
 
     @Column(nullable = false, unique = true, length = 255)
@@ -28,14 +39,4 @@ public class Usuario {
         criadoEm = LocalDateTime.now();
     }
 
-    // Getters e Setters (ou use @Data do Lombok se tiver a dependência)
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
-    public String getSenhaHash() { return senhaHash; }
-    public void setSenhaHash(String senhaHash) { this.senhaHash = senhaHash; }
-    public LocalDateTime getCriadoEm() { return criadoEm; }
-    public List<Cliente> getClientes() { return clientes; }
-    public void setClientes(List<Cliente> clientes) { this.clientes = clientes; }
 }

@@ -1,16 +1,26 @@
-package com.energ_ia.api.modelos;
+package com.energ_ia.api.domain.cliente;
 
+import com.energ_ia.api.domain.equipamento.EquipamentoCatalogo;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 
-import com.energ_ia.api.modelos.Cliente;
+import com.energ_ia.api.domain.cliente.Cliente;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "Cliente_Equipamento")
-public class ClienteEquipamentos {
+@Getter
+@Setter
+@NoArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+public class ClienteEquipamento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Include
     private Long id;
 
     @ManyToOne

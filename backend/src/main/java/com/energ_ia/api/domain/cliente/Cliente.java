@@ -1,35 +1,28 @@
-package com.energ_ia.api.modelos;
+package com.energ_ia.api.domain.cliente;
 
+import com.energ_ia.api.domain.core.TipoImovel;
+import com.energ_ia.api.domain.core.TipoPessoa;
+import com.energ_ia.api.domain.usuario.Usuario;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
-import jakarta.persistence.Entity;
-
-import jakarta.persistence.Table;
-
-import jakarta.persistence.GeneratedValue;
-
-import jakarta.persistence.Id;
-
-import jakarta.persistence.ManyToOne;
-
-import jakarta.persistence.JoinColumn;
-
-import jakarta.persistence.Column;
-
-import jakarta.persistence.Column;
-
-import java.time.LocalDateTime;
-
-import jakarta.persistence.PrePersist;
-
-import java.time.LocalDateTime;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "Cliente")
+@Getter
+@Setter
+@NoArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Cliente {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Include
     private Long id;
 
     @ManyToOne
@@ -43,8 +36,9 @@ public class Cliente {
     @Column(name = "tipo_pessoa", nullable = false)
     private TipoPessoa tipoPessoa;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "tipo_imovel", nullable = false, length = 100)
-    private String tipoImovel;
+    private TipoImovel tipoImovel;
 
     @Column(length = 20)
     private String cep;
@@ -71,6 +65,9 @@ public class Cliente {
     protected void onCreate() {
         criadoEm = LocalDateTime.now();
     }
+
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ClienteEquipamento> equipamentos = new ArrayList<>();
 
     public String toString() {
         return "Cliente{" +

@@ -1,30 +1,120 @@
 # ============================
 #Importação das bibliotecas necessárias
 # ============================
+
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
+import plotly.io as pio
+import numpy as np
+import os
+
+from plotly.subplots import make_subplots
 
 # ============================
-# caminho do CSV
+# Tema Profissional EnerSmart
+# ============================
+
+CORES = {
+
+    "verde_principal": "#006455",
+
+    "verde_energia": "#00A878",
+
+    "verde_escuro": "#003B32",
+
+    "verde_claro": "#76D7C4",
+
+    "cinza": "#F5F8F7"
+}
+
+pio.templates["Lu | Men Dashboard"] = go.layout.Template(
+    layout=go.Layout(
+
+        font=dict(
+            family="Arial",
+            size=14,
+            color=CORES["verde_principal"]
+        ),
+
+        title=dict(
+            font=dict(
+                size=22,
+                color=CORES["verde_principal"]
+            ),
+            x=0.05
+        ),
+
+        paper_bgcolor="#F5F8F7",
+
+        plot_bgcolor="white",
+
+        hoverlabel=dict(
+            bgcolor="white",
+            font_size=13,
+            font_family="Arial"
+        ),
+
+        margin=dict(
+            l=50,
+            r=50,
+            t=80,
+            b=50
+        ),
+
+        xaxis=dict(
+    showgrid=True,
+    gridcolor="#E8F2EF"
+),
+
+yaxis=dict(
+    showgrid=False
+)
+    )
+)
+
+pio.templates.default="Lu | Men Dashboard"
+
+# ============================
+# Paleta
+# ============================
+PALETA_ENERSMART = [
+    "#006455",
+    "#00A878",
+    "#76D7C4",
+    "#003B32"
+]
+
+# ============================
+# Carregar base para Dashboard
 # ============================
 from pathlib import Path
 
-BASE_DIR = Path(__file__).resolve().parent
 
-arquivo = BASE_DIR / "data-science" / "consumo_original.csv"
+def carregar_base_dashboard():
 
-df = pd.read_csv(arquivo)
+    BASE_DIR = Path(__file__).resolve().parent.parent
 
-print("✅ Dataset carregado com sucesso!")
-print(df.head())
-print(df.columns)
+    arquivo = BASE_DIR / "data-science" / "consumo_original.csv"
+
+    if not arquivo.exists():
+        raise FileNotFoundError(
+            f"Arquivo não encontrado: {arquivo}"
+        )
+
+    df = pd.read_csv(arquivo)
+
+    print("✅ Base carregada para Dashboard!")
+    print(f"📂 Caminho: {arquivo}")
+    print(f"📊 Total de registros: {len(df)}")
+
+    return df
+
+df = carregar_base_dashboard()
 
 # ============================
-# criado uma coluna mês simulada
+# # Criado atributo temporal simulado para análise mensal
 # ============================
-
-import numpy as np
 
 np.random.seed(42)
 
@@ -37,9 +127,6 @@ df["mes"] = np.random.choice(
     ],
     size=len(df)
 )
-# ============================
-# 1 - [Dashboard] Definir indicadores de eficiência energética
-# ============================
 
 # ============================
 # 1 - Indicadores do Dashboard
@@ -57,7 +144,15 @@ tempo_medio = df['tempo_medio_uso_diario'].mean()
 
 eficientes = (df['perfil_energetico'] == 'Eficiente').sum()
 
+moderados = (df['perfil_energetico'] == 'Moderado').sum()
+
+ineficientes = (df['perfil_energetico'] == 'Ineficiente').sum()
+
 percentual_eficientes = (eficientes / total_clientes) * 100
+
+percentual_moderados = (moderados / total_clientes) * 100
+
+percentual_ineficientes = (ineficientes / total_clientes) * 100
 
 print("========== KPIs ==========")
 print(f"Clientes: {total_clientes}")
@@ -66,20 +161,99 @@ print(f"Consumo Médio: {consumo_medio:.2f} kWh")
 print(f"Equipamentos Médios: {equipamentos_medios:.1f}")
 print(f"Tempo Médio de Uso: {tempo_medio:.1f} horas")
 print(f"% Clientes Eficientes: {percentual_eficientes:.1f}%")
+print(f"% Clientes Moderados: {percentual_moderados:.1f}%")
+print(f"% Clientes Ineficientes: {percentual_ineficientes:.1f}%")
+
+
+# ============================
+# card de contexto para apresentação
+# ============================
+print("""
+⚡ Lu | Men Dashboard
+
+Objetivo:
+Identificar padrões de consumo energético
+e oportunidades de eficiência.
+
+Inteligência Artificial:
+Modelo de classificação energética:
+
+🟢 Eficiente
+🟡 Moderado
+🔴 Ineficiente
+
+Base analisada:
+{} clientes
+""".format(total_clientes))
+
+# ============================
+# Layout Dashboard
+# ============================
+
+dashboard = make_subplots(
+
+    rows=4,
+    cols=2,
+
+    specs=[
+        [{"type": "indicator"}, {"type": "bar"}],
+
+        [{"type": "bar"}, {"type": "pie"}],
+
+        [{"type": "bar"}, {"type": "scatter"}],
+
+        [{"type": "bar"}, {"type": "indicator"}]
+    ],
+
+    subplot_titles=[
+
+        "Consumo Médio por Cliente",
+
+        "Consumo por Perfil",
+
+        "Consumo por Cliente",
+
+        "Distribuição dos Perfis",
+
+        "Quantidade de Clientes",
+
+        "Consumo x Horário Pico",
+
+        "Horas de Pico",
+
+        "Clientes Eficientes"
+    ]
+)
 
 # ============================
 # 2-[Dashboard] Criar KPI de consumo mensal (kWh)
 # ============================
-df.groupby("mes")["consumo_kwh"].sum()
+dashboard.add_trace(
 
-fig = go.Figure(go.Indicator(
-    mode="number+delta",
-    value=consumo_medio,
-    number={'suffix':" kWh"},
-    title={"text":"Consumo Médio"}
-))
+    go.Indicator(
 
-fig.show()
+        mode="number",
+
+        value=round(consumo_medio,1),
+
+        number={
+            "suffix":" kWh",
+            "font":{
+                "size":45,
+                "color":CORES["verde_principal"]
+            }
+        },
+
+        title={
+            "text":"<b>Consumo Médio por Cliente</b>"        }
+
+    ),
+
+    row=1,
+
+    col=1
+
+)
 
 # ============================
 # 3- [Dashboard] Criar gráfico de consumo energético
@@ -89,25 +263,112 @@ consumo = df.groupby("perfil_energetico")["consumo_kwh"].mean().reset_index()
 
 fig = px.bar(
     consumo,
-    x="perfil_energetico",
-    y="consumo_kwh",
+
+    y="perfil_energetico",
+
+    x="consumo_kwh",
+
+    orientation="h",
+
     color="perfil_energetico",
-    title="Consumo Médio por Perfil Energético"
+
+    color_discrete_sequence=PALETA_ENERSMART,
+
+    text_auto=".0f",
+
+    title="<b>Consumo Médio por Perfil Energético</b>"
 )
 
-fig.show()
+
+fig.update_traces(
+    textposition="outside",
+    marker_line_width=1,
+    marker_line_color="white"
+)
+
+
+fig.update_layout(
+
+    height=450,
+
+    showlegend=False,
+
+    xaxis_title="Média mensal kWh",
+
+    yaxis_title="Perfil Energético",
+
+    bargap=0.35
+
+)
+
+for trace in fig.data:
+
+    dashboard.add_trace(
+
+        trace,
+
+        row=1,
+
+        col=2
+
+    )
+
 
 consumo_tipo = df.groupby("tipo_cliente")["consumo_kwh"].mean().reset_index()
 
 fig = px.bar(
+
     consumo_tipo,
-    x="tipo_cliente",
-    y="consumo_kwh",
+
+    y="tipo_cliente",
+
+    x="consumo_kwh",
+
+    orientation="h",
+
     color="tipo_cliente",
-    title="Consumo Médio por Tipo de Cliente"
+
+    color_discrete_sequence=PALETA_ENERSMART,
+
+    text_auto=".0f",
+
+    title="<b>Consumo Médio por Tipo de Cliente</b>"
+
 )
 
-fig.show()
+
+fig.update_traces(
+
+    textposition="outside",
+
+    marker_line_width=1,
+
+    marker_line_color="white"
+
+)
+
+
+fig.update_layout(
+
+    height=450,
+
+    showlegend=False,
+
+    xaxis_title="Consumo Médio (kWh)",
+
+    yaxis_title="Tipo de Cliente",
+
+    bargap=0.35
+
+)
+for trace in fig.data:
+
+    dashboard.add_trace(
+        trace,
+        row=2,
+        col=1
+    )
+
 
 # ============================
 # 4 - [Dashboard] Criar gráfico de eficiência energética
@@ -118,22 +379,85 @@ eficiencia.columns = ['Perfil','Quantidade']
 
 fig = px.pie(
     eficiencia,
-    names='Perfil',
-    values='Quantidade',
-    title='Distribuição dos Perfis Energéticos'
+
+    names="Perfil",
+
+    values="Quantidade",
+
+    hole=0.55,
+
+    color_discrete_sequence=PALETA_ENERSMART,
+
+    title="<b>Distribuição dos Perfis Energéticos</b>"
 )
 
-fig.show()
+
+fig.update_traces(
+    textinfo="percent+label"
+)
+
+
+fig.update_layout(
+    height=450
+)
+
+for trace in fig.data:
+
+    dashboard.add_trace(
+        trace,
+        row=2,
+        col=2
+    )
 
 fig = px.bar(
     eficiencia,
-    x='Perfil',
-    y='Quantidade',
-    color='Perfil',
-    title='Perfil Energético dos Clientes'
+
+    y="Perfil",
+
+    x="Quantidade",
+
+    orientation="h",
+
+    color="Perfil",
+
+    color_discrete_sequence=PALETA_ENERSMART,
+
+    text_auto=True,
+
+    title="<b>Quantidade de Clientes por Perfil Energético</b>"
+
 )
 
-fig.show()
+
+fig.update_traces(
+
+    textposition="outside"
+
+)
+
+
+fig.update_layout(
+
+    height=450,
+
+    showlegend=False,
+
+    xaxis_title="Quantidade de Clientes",
+
+    yaxis_title="Perfil"
+
+)
+
+dashboard.add_trace(
+
+    fig.data[0],
+
+    row=3,
+
+    col=1
+
+)
+
 
 # ============================
 # 5 - [Dashboard] Criar gráfico de pico de consumo
@@ -141,29 +465,133 @@ fig.show()
 
 fig = px.scatter(
     df,
-    x='uso_horario_pico_horas',
-    y='consumo_kwh',
-    color='perfil_energetico',
-    size='quantidade_equipamentos',
-    hover_data=['tipo_cliente'],
-    title='Consumo x Horário de Pico'
+
+    x="uso_horario_pico_horas",
+
+    y="consumo_kwh",
+
+    color="perfil_energetico",
+
+    size="quantidade_equipamentos",
+
+    hover_data=[
+        "tipo_cliente"
+    ],
+
+    color_discrete_sequence=PALETA_ENERSMART,
+
+    title="<b>Padrão de Consumo x Horário de Pico</b>"
 )
 
-fig.show()
+
+fig.update_layout(
+    height=500
+)
+
+for trace in fig.data:
+
+    dashboard.add_trace(
+        trace,
+        row=3,
+        col=2
+    )
+
 
 
 pico = df.groupby("tipo_cliente")["uso_horario_pico_horas"].mean().reset_index()
 
 fig = px.bar(
+
     pico,
-    x="tipo_cliente",
-    y="uso_horario_pico_horas",
+
+    y="tipo_cliente",
+
+    x="uso_horario_pico_horas",
+
+    orientation="h",
+
     color="tipo_cliente",
-    title="Horas Médias de Uso no Horário de Pico"
+
+    color_discrete_sequence=PALETA_ENERSMART,
+
+    text_auto=".1f",
+
+    title="<b>Horas Médias de Uso no Horário de Pico</b>"
+
 )
 
-fig.show()
 
+fig.update_traces(
+
+    textposition="outside"
+
+)
+
+
+fig.update_layout(
+
+    height=450,
+
+    showlegend=False,
+
+    xaxis_title="Horas",
+
+    yaxis_title="Tipo de Cliente"
+
+)
+
+for trace in fig.data:
+
+    dashboard.add_trace(
+        trace,
+        row=4,
+        col=1
+    )
+
+dashboard.add_trace(
+
+    go.Indicator(
+
+        mode="number",
+
+        value=round(percentual_eficientes,1),
+
+        number={
+            "suffix": "%",
+            "font": {
+                "size": 45,
+                "color": CORES["verde_principal"]
+            }
+        },
+
+        title={
+            "text": "<b>Clientes Eficientes</b>"
+        }
+
+    ),
+
+    row=4,
+
+    col=2
+
+)
+
+dashboard.update_layout(
+
+    height=1800,
+
+    width=1400,
+
+    title_text="<b>⚡ Lu | Men Dashboard - Eficiência Energética</b>",
+
+    template="Lu | Men Dashboard",
+
+    showlegend=False
+
+)
+
+
+dashboard.show()
 
 # ============================
 # Esses gráficos contam uma história clara dos dados:
@@ -180,3 +608,4 @@ fig.show()
 # | 🔥 Heatmap                   | Correlação entre variáveis          | Apoiar a análise exploratória (EDA)                    |
 # | 🌳 Importância das Variáveis | Random Forest                       | Mostrar quais fatores mais influenciam a classificação |
 # ============================
+# %%

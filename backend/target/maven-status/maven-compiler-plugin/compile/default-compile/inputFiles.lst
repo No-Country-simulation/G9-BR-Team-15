@@ -1,5 +1,6 @@
 /home/luanda/Hackha/G9-BR-Team-15/backend/src/main/java/com/energ_ia/api/ApiApplication.java
 /home/luanda/Hackha/G9-BR-Team-15/backend/src/main/java/com/energ_ia/api/controller/AnaliseController.java
+/home/luanda/Hackha/G9-BR-Team-15/backend/src/main/java/com/energ_ia/api/controller/AuthController.java
 /home/luanda/Hackha/G9-BR-Team-15/backend/src/main/java/com/energ_ia/api/domain/avaliacao/AvaliacaoEficiencia.java
 /home/luanda/Hackha/G9-BR-Team-15/backend/src/main/java/com/energ_ia/api/domain/cliente/Cliente.java
 /home/luanda/Hackha/G9-BR-Team-15/backend/src/main/java/com/energ_ia/api/domain/cliente/ClienteEquipamento.java
@@ -14,5 +15,10 @@
 /home/luanda/Hackha/G9-BR-Team-15/backend/src/main/java/com/energ_ia/api/domain/ranking/TipoRanking.java
 /home/luanda/Hackha/G9-BR-Team-15/backend/src/main/java/com/energ_ia/api/domain/tarifa/TarifaEnergia.java
 /home/luanda/Hackha/G9-BR-Team-15/backend/src/main/java/com/energ_ia/api/domain/usuario/Usuario.java
-/home/luanda/Hackha/G9-BR-Team-15/backend/src/main/java/com/energ_ia/api/dto/AnaliseRequisicao.java
-/home/luanda/Hackha/G9-BR-Team-15/backend/src/main/java/com/energ_ia/api/dto/AnaliseResponse.java
+/home/luanda/Hackha/G9-BR-Team-15/backend/src/main/java/com/energ_ia/api/dto/AnaliseRequisicaoDTO.java
+/home/luanda/Hackha/G9-BR-Team-15/backend/src/main/java/com/energ_ia/api/dto/AnaliseResponseDTO.java
+/home/luanda/Hackha/G9-BR-Team-15/backend/src/main/java/com/energ_ia/api/dto/AuthResponseDTO.java
+/home/luanda/Hackha/G9-BR-Team-15/backend/src/main/java/com/energ_ia/api/dto/LoginRequestDTO.java
+/home/luanda/Hackha/G9-BR-Team-15/backend/src/main/java/com/energ_ia/api/dto/RegisterRequestDTO.java
+/home/luanda/Hackha/G9-BR-Team-15/backend/src/main/java/com/energ_ia/api/infra/service/AuthService.java
+/home/luanda/Hackha/G9-BR-Team-15/backend/src/main/java/com/energ_ia/api/repository/UsuarioRepository.java

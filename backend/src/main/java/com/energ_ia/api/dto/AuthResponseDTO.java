@@ -1,4 +1,5 @@
 package com.energ_ia.api.dto;
+
 public class AuthResponseDTO {
     private Long id;
     private String nome;

@@ -1,4 +1,5 @@
 package com.energ_ia.api.dto;
+
 public class LoginRequestDTO {
     private String email;
     private String senha;

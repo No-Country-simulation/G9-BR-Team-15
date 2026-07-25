@@ -1,4 +1,5 @@
 package com.energ_ia.api.dto;
+
 public class RegisterRequestDTO {
     private String nome;
     private String email;

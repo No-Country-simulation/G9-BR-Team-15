@@ -1,19 +1,21 @@
 package com.energ_ia.api.infra.service;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+
 import com.energ_ia.api.domain.usuario.Usuario;
+import com.energ_ia.api.dto.AuthResponseDTO;
 import com.energ_ia.api.dto.LoginRequestDTO;
 import com.energ_ia.api.dto.RegisterRequestDTO;
-import com.energ_ia.api.dto.AuthResponseDTO;
 import com.energ_ia.api.repository.UsuarioRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 @Service
 public class AuthService {
     @Autowired
     private UsuarioRepository usuarioRepository;
     public AuthResponseDTO cadastrar(RegisterRequestDTO request) {
         if (usuarioRepository.existsByEmail(request.getEmail())) {
-            throw new RuntimeException("Email já cadastrado");
-        }
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Email já cadastrado");       }
         Usuario usuario = new Usuario();
         usuario.setNome(request.getNome());
         usuario.setEmail(request.getEmail());

@@ -1,6 +1,6 @@
 package com.energ_ia.api.dto;
 
-public class AnaliseRequisicao {
+public class AnaliseRequisicaoDTO {
     private Integer consumoKwh;
     private Boolean usoHorarioPico;
     private Integer quantidadeEquipamentos;

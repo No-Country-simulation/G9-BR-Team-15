@@ -10,14 +10,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.energ_ia.api.dto.AnaliseRequisicao;
+import com.energ_ia.api.dto.AnaliseRequisicaoDTO;
 
 @RestController
 @RequestMapping("/analise-energetica")
 public class AnaliseController {
 
     @PostMapping
-    public ResponseEntity<Map<String, Object>> analisar(@RequestBody AnaliseRequisicao request) {
+    public ResponseEntity<Map<String, Object>> analisar(@RequestBody AnaliseRequisicaoDTO request) {
         // 1. Log para ver os dados recebidos
         System.out.println("Recebido: " + request);
 

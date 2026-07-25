@@ -2,16 +2,16 @@ package com.energ_ia.api.dto;
 
 import java.util.List;
 
-public class AnaliseResponse {
+public class AnaliseResponseDTO {
     private String categoria;
     private Double probabilidade;
     private List<String> recomendacoes;
     private Double custoEstimadoMensal;
 
     // Construtores, getters e setters
-    public AnaliseResponse() {}
+    public AnaliseResponseDTO() {}
 
-    public AnaliseResponse(String categoria, Double probabilidade, List<String> recomendacoes, Double custoEstimadoMensal) {
+    public AnaliseResponseDTO(String categoria, Double probabilidade, List<String> recomendacoes, Double custoEstimadoMensal) {
         this.categoria = categoria;
         this.probabilidade = probabilidade;
         this.recomendacoes = recomendacoes;

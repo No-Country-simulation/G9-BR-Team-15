@@ -1,0 +1,19 @@
+id,tipo,potencia_watts
+1,Geladeira Frost Free,150
+2,Micro-ondas,1200
+3,Airfryer,1500
+4,Forno Elétrico,1800
+5,Liquidificador,400
+6,Coifa / Depurador,120
+7,Freezer Horizontal,300
+8,Ar Condicionado Split,1200
+9,Ventilador de Coluna,80
+10,Chuveiro Elétrico,5500
+11,Torneira Elétrica,4500
+12,Televisão Smart,100
+13,Computador Desktop,250
+14,Videogame Console,150
+15,Robô Aspirador,40
+16,Servidores / TI,2000
+17,Maquinário Industrial,8000
+18,Iluminação Comercial (LEDs),1000

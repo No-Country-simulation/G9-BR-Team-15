@@ -1,9 +1,9 @@
-package com.energ_ia.api.controller;
+package com.energ_ia.api.controller.usuario;
 
-import com.energ_ia.api.dto.LoginRequestDTO;
-import com.energ_ia.api.dto.RegisterRequestDTO;
-import com.energ_ia.api.dto.AuthResponseDTO;
-import com.energ_ia.api.infra.service.AuthService;
+import com.energ_ia.api.dto.usuario.LoginRequestDTO;
+import com.energ_ia.api.dto.usuario.RegisterRequestDTO;
+import com.energ_ia.api.dto.usuario.AuthResponseDTO;
+import com.energ_ia.api.service.usuario.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

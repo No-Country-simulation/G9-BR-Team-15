@@ -1,5 +1,6 @@
 package com.energ_ia.api.controller;
 
+import com.energ_ia.api.controller.avaliacao.AnaliseController;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

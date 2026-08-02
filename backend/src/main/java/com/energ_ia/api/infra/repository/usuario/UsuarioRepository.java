@@ -1,4 +1,4 @@
-package com.energ_ia.api.repository;
+package com.energ_ia.api.infra.repository.usuario;
 
 import com.energ_ia.api.domain.usuario.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;

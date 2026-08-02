@@ -1,4 +1,4 @@
-package com.energ_ia.api.controller;
+package com.energ_ia.api.controller.avaliacao;
 
 import java.util.HashMap;
 import java.util.List;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.energ_ia.api.dto.AnaliseRequisicaoDTO;
+import com.energ_ia.api.dto.avaliacao.AnaliseRequisicaoDTO;
 
 @RestController
 @RequestMapping("/analise-energetica")

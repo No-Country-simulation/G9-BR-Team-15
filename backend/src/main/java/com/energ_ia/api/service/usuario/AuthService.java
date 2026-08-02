@@ -1,14 +1,14 @@
-package com.energ_ia.api.infra.service;
+package com.energ_ia.api.service.usuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.energ_ia.api.domain.usuario.Usuario;
-import com.energ_ia.api.dto.AuthResponseDTO;
-import com.energ_ia.api.dto.LoginRequestDTO;
-import com.energ_ia.api.dto.RegisterRequestDTO;
-import com.energ_ia.api.repository.UsuarioRepository;
+import com.energ_ia.api.dto.usuario.AuthResponseDTO;
+import com.energ_ia.api.dto.usuario.LoginRequestDTO;
+import com.energ_ia.api.dto.usuario.RegisterRequestDTO;
+import com.energ_ia.api.infra.repository.usuario.UsuarioRepository;
 @Service
 public class AuthService {
     @Autowired

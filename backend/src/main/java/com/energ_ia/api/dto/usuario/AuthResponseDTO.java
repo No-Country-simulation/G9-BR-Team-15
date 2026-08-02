@@ -1,4 +1,4 @@
-package com.energ_ia.api.dto;
+package com.energ_ia.api.dto.usuario;
 
 public class AuthResponseDTO {
     private Long id;

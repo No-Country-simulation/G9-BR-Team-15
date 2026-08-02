@@ -1,4 +1,4 @@
-package com.energ_ia.api.dto;
+package com.energ_ia.api.dto.avaliacao;
 
 import java.util.List;
 

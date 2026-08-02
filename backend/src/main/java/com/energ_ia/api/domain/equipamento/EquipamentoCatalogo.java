@@ -30,6 +30,13 @@ public class EquipamentoCatalogo {
     @Column(name = "potencia_watts", nullable = false)
     private Integer potenciaWatts;
 
+    public EquipamentoCatalogo(String tipo, String marca, String modelo, Integer integer) {
+        this.tipo = tipo;
+        this.marca = marca;
+        this.modelo = modelo;
+        this.potenciaWatts = integer;
+    }
+
     // Getters e Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }

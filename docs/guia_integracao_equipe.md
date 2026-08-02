@@ -2,11 +2,18 @@
 
 Esse documento explica pra quem não é de Ciência de Dados (Data Viz e Backend) como plugar o que foi feito nas suas partes.
 
-**Modelo final: Random Forest** (68,5% de acurácia, F1 macro 0,676 — melhor que Regressão Logística e Árvore de Decisão, testado com comparação justa entre os 3).
+## ⚠️ Existem DOIS modelos, com endpoints separados no `ml-service`
+
+- **Modelo MVP (obrigatório)** — `treino_modelo_mvp.py` / `prever_mvp.py` / `modelo_mvp.pkl`, exposto em **`POST /analise-energetica`**. Formato de entrada fixo, exigido pelo edital (`consumo_kwh`, `uso_horario_pico`, `quantidade_equipamentos`, `tipo_imovel`, `horas_alto_consumo`). Acurácia de 98,5%.
+- **Modelo principal (detalhado)** — `treino_modelo.py` / `prever.py` / `modelo_energia.pkl`, exposto em **`POST /analise-energetica-detalhada`**. Usa a lista de equipamentos do cliente, 68,5% de acurácia real (sem vazamento de dado). **É esse que o dashboard usa, e é esse que representa o trabalho de Ciência de Dados.**
+
+Não existe escolha aqui — os dois endpoints coexistem, cada um com seu propósito. O obrigatório do edital não pode ter o formato alterado.
 
 ---
 
-## Dashboard
+## Pro Data Viz (dashboard)
+
+**O dashboard usa exclusivamente o Modelo Principal.** Nada muda aqui com a existência do Modelo MVP.
 
 **⚠️ Atenção, isso é importante:** o `dashboard.py` atual lê `consumo_original.csv` e usa colunas (`tempo_medio_uso_diario`, `uso_horario_pico_horas`, `tipo_cliente`) que **não existem mais**. A base atual é outra: `base_energetica.csv`, gerada pelo `treino_modelo.py`.
 
@@ -49,7 +56,37 @@ df = pd.read_csv("base_energetica.csv")
 
 ## Pro Backend
 
-### O que a IA espera receber
+### `POST /analise-energetica` — endpoint obrigatório do edital
+
+Formato fixo, não pode ser alterado:
+
+```python
+import joblib
+from prever_mvp import prever_mvp
+
+modelo_mvp = joblib.load("modelo_mvp.pkl")
+
+resultado = prever_mvp(
+    consumo_kwh=420,
+    uso_horario_pico=True,
+    quantidade_equipamentos=10,
+    tipo_imovel="Residencial",
+    horas_alto_consumo=8,
+    modelo=modelo_mvp,
+)
+```
+
+Retorna:
+```python
+{
+    "categoria": "Ineficiente",
+    "probabilidade": 0.81,
+    "recomendacoes": ["...", "..."],
+    "custo_estimado_mensal": 315.00
+}
+```
+
+### `POST /analise-energetica-detalhada` — Modelo Principal (recomendado pro resto do sistema)
 
 A função `prever()` do `prever.py` precisa da **lista de equipamentos do cliente**, porque o modelo foi treinado usando consumo por categoria de equipamento. Formato de entrada:
 
@@ -64,8 +101,17 @@ equipamentos = [
 
 O campo `"tipo"` de cada equipamento precisa bater com um dos nomes que já existem em `tabela_equipamento_catalogo.csv`. Isso já é o formato que a entidade `ClienteEquipamento` guarda no banco — o backend só precisa montar essa lista a partir do que já tem salvo pro cliente.
 
-### O que a IA devolve
+```python
+import joblib
+from prever import prever, carregar_catalogo
 
+modelo = joblib.load("modelo_energia.pkl")
+df_catalogo = carregar_catalogo(".")
+
+resultado = prever(tipo_pessoa, tipo_imovel, equipamentos, modelo, df_catalogo)
+```
+
+Retorna:
 ```python
 {
     "categoria": "Eficiente",
@@ -77,23 +123,9 @@ O campo `"tipo"` de cada equipamento precisa bater com um dos nomes que já exis
 }
 ```
 
-Já bate com o formato que o endpoint `POST /analise-energetica` precisa devolver. `alerta_consumo_alto` é `True` quando o cliente cai em "Ineficiente" — útil se o front quiser destacar isso visualmente.
+Os dois endpoints rodam dentro do `ml-service` (Python/FastAPI, arquivo `app.py`) — o backend Java chama esse serviço via HTTP, não dentro do próprio backend Java, já que o modelo é scikit-learn (Python).
 
-### Como chamar
-
-```python
-import joblib
-from prever import prever, carregar_catalogo
-
-modelo = joblib.load("modelo_energia.pkl")
-df_catalogo = carregar_catalogo(".")
-
-resultado = prever(tipo_pessoa, tipo_imovel, equipamentos, modelo, df_catalogo)
-```
-
-Isso deveria rodar dentro do `ml-service` (Python/FastAPI), que o backend Java chama via HTTP — não dentro do próprio backend Java, já que o modelo é scikit-learn (Python).
-
-### Novidade: simulação de economia
+### Novidade: simulação de economia (só no Modelo Principal)
 
 Se o front quiser mostrar "quanto você economizaria reduzindo X% do consumo", use:
 ```python
@@ -108,8 +140,9 @@ simular_economia(consumo_atual_kwh=500, reducao_percentual=20)
 
 | Arquivo | Quem usa |
 |---|---|
-| `treino_modelo.py` | só quem for retreinar o modelo (Ciência de Dados) |
-| `modelo_energia.pkl` | quem for fazer o `ml-service` (Backend/quem cuidar da API) |
-| `prever.py` | idem — é o "manual de instruções" de como usar o `.pkl` |
-| `base_energetica.csv` ou `previsoes.csv` | Data Viz, pro dashboard |
+| `treino_modelo.py` / `treino_modelo_mvp.py` | só quem for retreinar o modelo (Ciência de Dados) |
+| `modelo_energia.pkl` + `modelo_mvp.pkl` | quem for fazer o `ml-service` (Backend/quem cuidar da API) — precisa dos dois |
+| `prever.py` + `prever_mvp.py` | idem — são o "manual de instruções" de como usar cada `.pkl` |
+| `app.py` | o `ml-service`, expõe os dois endpoints |
+| `base_energetica.csv` ou `previsoes.csv` | Data Viz, pro dashboard (sempre Modelo Principal) |
 | `eda_consumo.ipynb` | qualquer um que quiser entender/apresentar a análise completa |

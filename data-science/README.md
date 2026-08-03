@@ -8,7 +8,7 @@ Parte de Ciência de Dados do projeto. Classifica o perfil energético de um cli
 |---|---|---|
 | Arquivos | `treino_modelo_mvp.py` + `prever_mvp.py` | `treino_modelo.py` + `prever.py` |
 | Modelo salvo | `modelo_mvp.pkl` | `modelo_energia.pkl` |
-| Endpoint no `ml-service` | `POST /analise-energetica` (formato fixo do edital, não pode mudar) | `POST /analise-energetica-detalhada` |
+| Endpoint no `ml-service` | `POST /api/v1/teste/analise-energetica` (formato fixo do edital, não pode mudar; alias `POST /teste-analise-energetica`) | `POST /api/v1/analise-energetica` (alias `POST /analise-energetica`) |
 | Entrada | os 5 campos exatos do edital (`consumo_kwh`, `uso_horario_pico`, `quantidade_equipamentos`, `tipo_imovel`, `horas_alto_consumo`) | lista de equipamentos do cliente |
 | Saída | categoria + probabilidade + recomendações + custo estimado | categoria + probabilidade + recomendações + custo estimado + consumo estimado + alerta |
 | Acurácia | 99% (**não é um número bom** — veja abaixo) | 68,5% (Random Forest, sem vazamento de dado) |
@@ -46,7 +46,7 @@ python treino_modelo_mvp.py   # gera modelo_mvp.pkl
 
 ## Como o Backend vai usar
 
-### `POST /analise-energetica` — endpoint obrigatório do edital
+### `POST /api/v1/teste/analise-energetica` — endpoint obrigatório do edital
 
 Formato fixo, não pode ser alterado:
 
@@ -76,7 +76,7 @@ Retorna:
 }
 ```
 
-### `POST /analise-energetica-detalhada` — Modelo Principal (recomendado pro resto do sistema)
+### `POST /api/v1/analise-energetica` — Modelo Principal (recomendado pro resto do sistema)
 
 A função `prever()` do `prever.py` recebe a lista de equipamentos do cliente (o mesmo formato que já é salvo em `ClienteEquipamento`):
 
@@ -111,7 +111,7 @@ Retorna:
 }
 ```
 
-Os dois endpoints rodam dentro do **ml-service** (Python/FastAPI, arquivo `app.py`) — o backend Java chama esse serviço via HTTP, não importa o `.pkl` diretamente (scikit-learn é Python, não dá pra carregar em Java).
+Os dois endpoints rodam dentro do **ml-service** (Python/FastAPI, arquivo `main.py`) — o backend Java chama esse serviço via HTTP, não importa o `.pkl` diretamente (scikit-learn é Python, não dá pra carregar em Java).
 
 **Bônus:** se precisar rodar a previsão do Modelo Principal pra vários clientes de uma vez (ex: gerar um relatório em lote), use `prever_em_lote(pasta=".")` — processa todos os clientes das tabelas e salva em `previsoes.csv`.
 

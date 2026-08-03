@@ -4,8 +4,8 @@ Esse documento explica pra quem não é de Ciência de Dados (Data Viz e Backend
 
 ## ⚠️ Existem DOIS modelos, com endpoints separados no `ml-service`
 
-- **Modelo MVP (obrigatório)** — `treino_modelo_mvp.py` / `prever_mvp.py` / `modelo_mvp.pkl`, exposto em **`POST /analise-energetica`**. Formato de entrada fixo, exigido pelo edital (`consumo_kwh`, `uso_horario_pico`, `quantidade_equipamentos`, `tipo_imovel`, `horas_alto_consumo`). Acurácia de 98,5%.
-- **Modelo principal (detalhado)** — `treino_modelo.py` / `prever.py` / `modelo_energia.pkl`, exposto em **`POST /analise-energetica-detalhada`**. Usa a lista de equipamentos do cliente, 68,5% de acurácia real (sem vazamento de dado). **É esse que o dashboard usa, e é esse que representa o trabalho de Ciência de Dados.**
+- **Modelo MVP (obrigatório)** — `treino_modelo_mvp.py` / `prever_mvp.py` / `modelo_mvp.pkl`, exposto em **`POST /api/v1/teste/analise-energetica`** (com alias **`/teste-analise-energetica`**). Formato de entrada fixo, exigido pelo edital (`consumo_kwh`, `uso_horario_pico`, `quantidade_equipamentos`, `tipo_imovel`, `horas_alto_consumo`). Acurácia de 98,5%.
+- **Modelo principal (detalhado)** — `treino_modelo.py` / `prever.py` / `modelo_energia.pkl`, exposto em **`POST /api/v1/analise-energetica`** (com alias **`/analise-energetica`**). Usa a lista de equipamentos do cliente, 68,5% de acurácia real (sem vazamento de dado). **É esse que o dashboard usa, e é esse que representa o trabalho de Ciência de Dados.**
 
 Não existe escolha aqui — os dois endpoints coexistem, cada um com seu propósito. O obrigatório do edital não pode ter o formato alterado.
 
@@ -56,7 +56,7 @@ df = pd.read_csv("base_energetica.csv")
 
 ## Pro Backend
 
-### `POST /analise-energetica` — endpoint obrigatório do edital
+### `POST /api/v1/teste/analise-energetica` — endpoint obrigatório do edital
 
 Formato fixo, não pode ser alterado:
 
@@ -86,7 +86,7 @@ Retorna:
 }
 ```
 
-### `POST /analise-energetica-detalhada` — Modelo Principal (recomendado pro resto do sistema)
+### `POST /api/v1/analise-energetica` — Modelo Principal (recomendado pro resto do sistema)
 
 A função `prever()` do `prever.py` precisa da **lista de equipamentos do cliente**, porque o modelo foi treinado usando consumo por categoria de equipamento. Formato de entrada:
 
@@ -123,7 +123,7 @@ Retorna:
 }
 ```
 
-Os dois endpoints rodam dentro do `ml-service` (Python/FastAPI, arquivo `app.py`) — o backend Java chama esse serviço via HTTP, não dentro do próprio backend Java, já que o modelo é scikit-learn (Python).
+Os dois endpoints rodam dentro do `ml-service` (Python/FastAPI, arquivo `main.py`) — o backend Java chama esse serviço via HTTP, não dentro do próprio backend Java, já que o modelo é scikit-learn (Python).
 
 ### Novidade: simulação de economia (só no Modelo Principal)
 
@@ -143,6 +143,6 @@ simular_economia(consumo_atual_kwh=500, reducao_percentual=20)
 | `treino_modelo.py` / `treino_modelo_mvp.py` | só quem for retreinar o modelo (Ciência de Dados) |
 | `modelo_energia.pkl` + `modelo_mvp.pkl` | quem for fazer o `ml-service` (Backend/quem cuidar da API) — precisa dos dois |
 | `prever.py` + `prever_mvp.py` | idem — são o "manual de instruções" de como usar cada `.pkl` |
-| `app.py` | o `ml-service`, expõe os dois endpoints |
+| `main.py` | o `ml-service`, expõe os dois endpoints |
 | `base_energetica.csv` ou `previsoes.csv` | Data Viz, pro dashboard (sempre Modelo Principal) |
 | `eda_consumo.ipynb` | qualquer um que quiser entender/apresentar a análise completa |

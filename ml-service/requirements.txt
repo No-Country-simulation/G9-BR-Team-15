@@ -4,8 +4,9 @@ uvicorn==0.24.0
 pydantic==2.5.2
 # MACHINE LEARNING E DADOS
 pandas
-scikit-learn
+scikit-learn==1.8.0
 joblib
+httpx
 # VISUALIZAÇÃO
 matplotlib
 seaborn

@@ -2,15 +2,16 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-# Copia e instala as dependências primeiro (aproveita o cache do Docker)
-COPY requirements.txt .
+# Copia e instala as dependências
+COPY ml-service/requirements.txt ./requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copia o resto do código
-COPY . .
+# Copia o código do serviço e os dados necessários
+COPY ml-service/ ./
+COPY data-science/ ./data-science/
 
-# Expõe a porta do FastAPI
+# Porta do FastAPI
 EXPOSE 8000
 
-# Comando para iniciar o servidor
+# Inicia o servidor
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]

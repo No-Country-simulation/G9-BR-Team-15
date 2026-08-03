@@ -43,4 +43,4 @@ https://alura-es-cursos.github.io/projetos-hackathon-g9-brasil/
 
  ## Como rodar o projeto com Docker
 
- *As solicitações da API Java principal para a API do modelo de IA devem ser feitas na url "http://ml-service:8000/api/v1/" + "endpoint-que-deseja-utilizar". Ex: "http://ml-service:8000/api/v1/teste/analise-energetica"
+ *As solicitações da API Java principal para a API do modelo de IA devem ser feitas na url "http://ml-service:8000/api/v1/" + "endpoint-que-deseja-utilizar". Exemplos válidos: "http://ml-service:8000/api/v1/teste/analise-energetica" e "http://ml-service:8000/api/v1/analise-energetica". O serviço também aceita os aliases curtos "/teste-analise-energetica" e "/analise-energetica".

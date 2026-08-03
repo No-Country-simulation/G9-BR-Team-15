@@ -1,0 +1,12 @@
+# CORE DA API (Servidor e Roteamento)
+fastapi==0.104.1
+uvicorn==0.24.0
+pydantic==2.5.2
+# MACHINE LEARNING E DADOS
+pandas
+scikit-learn==1.8.0
+joblib
+httpx
+# VISUALIZAÇÃO
+matplotlib
+seaborn

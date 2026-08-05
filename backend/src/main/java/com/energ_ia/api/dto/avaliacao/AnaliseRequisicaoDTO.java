@@ -1,12 +1,25 @@
 package com.energ_ia.api.dto.avaliacao;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class AnaliseRequisicaoDTO {
+
+    @JsonProperty("consumo_kwh")
     private Integer consumoKwh;
+
+    @JsonProperty("uso_horario_pico")
     private Boolean usoHorarioPico;
+
+    @JsonProperty("quantidade_equipamentos")
     private Integer quantidadeEquipamentos;
+
+    @JsonProperty("tipo_imovel")
     private String tipoImovel;
+
+    @JsonProperty("horas_alto_consumo")
     private Integer horasAltoConsumo;
 
+    // Getters e Setters
     public Integer getConsumoKwh() { return consumoKwh; }
     public void setConsumoKwh(Integer consumoKwh) { this.consumoKwh = consumoKwh; }
     public Boolean getUsoHorarioPico() { return usoHorarioPico; }

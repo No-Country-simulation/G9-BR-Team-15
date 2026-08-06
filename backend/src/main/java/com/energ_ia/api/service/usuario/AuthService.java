@@ -1,34 +1,55 @@
 package com.energ_ia.api.service.usuario;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import com.energ_ia.api.domain.usuario.Usuario;
-import com.energ_ia.api.dto.usuario.AuthResponseDTO;
 import com.energ_ia.api.dto.usuario.LoginRequestDTO;
 import com.energ_ia.api.dto.usuario.RegisterRequestDTO;
+import com.energ_ia.api.dto.usuario.AuthResponseDTO;
 import com.energ_ia.api.infra.repository.usuario.UsuarioRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+
 @Service
 public class AuthService {
+
     @Autowired
     private UsuarioRepository usuarioRepository;
+
+    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
     public AuthResponseDTO cadastrar(RegisterRequestDTO request) {
-        if (usuarioRepository.existsByEmail(request.getEmail())) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Email já cadastrado");       }
+        if (usuarioRepository.existsByEmail(request.email())) {
+            throw new RuntimeException("Email já cadastrado");
+        }
+
         Usuario usuario = new Usuario();
-        usuario.setNome(request.getNome());
-        usuario.setEmail(request.getEmail());
-        usuario.setSenhaHash(request.getSenha());
+        usuario.setNome(request.nome());
+        usuario.setEmail(request.email());
+        usuario.setSenhaHash(passwordEncoder.encode(request.senha()));
+
         usuario = usuarioRepository.save(usuario);
-        return new AuthResponseDTO(usuario.getId(), usuario.getNome(), usuario.getEmail(), "Usuário cadastrado com sucesso");
+
+        return new AuthResponseDTO(
+                usuario.getId(),
+                usuario.getNome(),
+                usuario.getEmail(),
+                "Usuário cadastrado com sucesso"
+        );
     }
+
     public AuthResponseDTO login(LoginRequestDTO request) {
-        Usuario usuario = usuarioRepository.findByEmail(request.getEmail())
+        Usuario usuario = usuarioRepository.findByEmail(request.email())
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
-        if (!usuario.getSenhaHash().equals(request.getSenha())) {
+
+        if (!passwordEncoder.matches(request.senha(), usuario.getSenhaHash())) {
             throw new RuntimeException("Senha incorreta");
         }
-        return new AuthResponseDTO(usuario.getId(), usuario.getNome(), usuario.getEmail(), "Login realizado com sucesso");
+
+        return new AuthResponseDTO(
+                usuario.getId(),
+                usuario.getNome(),
+                usuario.getEmail(),
+                "Login realizado com sucesso"
+        );
     }
 }

@@ -5,8 +5,10 @@ import com.energ_ia.api.dto.equipamento.EquipamentoRequestDTO;
 import com.energ_ia.api.dto.equipamento.EquipamentoResponseDTO;
 import com.energ_ia.api.infra.repository.equipamento.EquipamentoRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -42,7 +44,7 @@ public class EquipamentoService {
     @Transactional(readOnly = true)
     public EquipamentoResponseDTO buscarPorId(Long id) {
         var equipamento = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Equipamento não encontrado!"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Equipamento não encontrado!"));
 
         return new EquipamentoResponseDTO(equipamento);
     }

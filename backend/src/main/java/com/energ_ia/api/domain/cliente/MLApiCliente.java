@@ -13,6 +13,9 @@ import org.springframework.web.client.RestTemplate;
 
 import com.energ_ia.api.dto.avaliacao.AnaliseRequisicaoDTO;
 import com.energ_ia.api.dto.avaliacao.AnaliseResponseDTO;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 @Component
 public class MLApiCliente {
@@ -39,7 +42,19 @@ public class MLApiCliente {
     private AnaliseResponseDTO chamar(String url, AnaliseRequisicaoDTO request) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<AnaliseRequisicaoDTO> entity = new HttpEntity<>(request, headers);
+
+        Map<String, Object> payload = new LinkedHashMap<>();
+        payload.put("tipo_pessoa", "PF");
+        payload.put("tipo_imovel", request.tipoImovel() != null ? request.tipoImovel() : "Residencial");
+
+        Map<String, Object> equipamento = new LinkedHashMap<>();
+        equipamento.put("tipo", "Ar Condicionado Split");
+        equipamento.put("quantidade", 1);
+        equipamento.put("horas_uso_diario", 4.0);
+        equipamento.put("dias_uso_mes", 30);
+        payload.put("equipamentos", List.of(equipamento));
+
+        HttpEntity<Map<String, Object>> entity = new HttpEntity<>(payload, headers);
 
         try {
             log.info("Chamando ML API: {}", url);

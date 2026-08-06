@@ -43,6 +43,8 @@ services:
       - SPRING_DATASOURCE_USERNAME=${DB_USER}
       - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
       - ML_SERVICE_URL=http://ml-service:8000
+      - DB_API_OBRIGATORIA=http://ml-service:8000/api/v1/analise-energetica
+      - DB_API_USUARIO_LOGADO=http://ml-service:8000/api/v1/teste/analise-energetica
     depends_on:
       - mysql-db
       - ml-service

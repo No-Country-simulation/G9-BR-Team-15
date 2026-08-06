@@ -1,5 +1,6 @@
 /home/luanda/Hackha/G9-BR-Team-15/backend/src/main/java/com/energ_ia/api/ApiApplication.java
 /home/luanda/Hackha/G9-BR-Team-15/backend/src/main/java/com/energ_ia/api/config/AppConfig.java
+/home/luanda/Hackha/G9-BR-Team-15/backend/src/main/java/com/energ_ia/api/config/SecurityConfig.java
 /home/luanda/Hackha/G9-BR-Team-15/backend/src/main/java/com/energ_ia/api/controller/avaliacao/AnaliseController.java
 /home/luanda/Hackha/G9-BR-Team-15/backend/src/main/java/com/energ_ia/api/controller/avaliacao/AnaliseTesteHackthonController.java
 /home/luanda/Hackha/G9-BR-Team-15/backend/src/main/java/com/energ_ia/api/controller/equipamento/EquipamentoController.java

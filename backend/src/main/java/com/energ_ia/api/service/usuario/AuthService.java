@@ -5,17 +5,22 @@ import com.energ_ia.api.dto.usuario.LoginRequestDTO;
 import com.energ_ia.api.dto.usuario.RegisterRequestDTO;
 import com.energ_ia.api.dto.usuario.AuthResponseDTO;
 import com.energ_ia.api.infra.repository.usuario.UsuarioRepository;
+import com.energ_ia.api.infra.security.TokenService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class AuthService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
 
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+    private final TokenService tokenService;
 
     public AuthResponseDTO cadastrar(RegisterRequestDTO request) {
         if (usuarioRepository.existsByEmail(request.email())) {
@@ -33,7 +38,8 @@ public class AuthService {
                 usuario.getId(),
                 usuario.getNome(),
                 usuario.getEmail(),
-                "Usuário cadastrado com sucesso"
+                "Usuário cadastrado com sucesso",
+                null // No cadastro não devolvemos token
         );
     }
 
@@ -45,11 +51,15 @@ public class AuthService {
             throw new RuntimeException("Senha incorreta");
         }
 
+        String token = tokenService.gerarToken(usuario);
+
         return new AuthResponseDTO(
                 usuario.getId(),
                 usuario.getNome(),
                 usuario.getEmail(),
-                "Login realizado com sucesso"
+                "Login realizado com sucesso",
+                token
+
         );
     }
 }

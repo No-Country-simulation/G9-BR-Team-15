@@ -1,5 +1,4 @@
 services:
-  # 1. Banco de Dados
   mysql-db:
     image: mysql:8.0
     container_name: lumen_mysql
@@ -16,7 +15,6 @@ services:
     networks:
       - energia_network
 
-  # 2. Serviço de Machine Learning (FastAPI)
   ml-service:
     build:
       context: .
@@ -28,23 +26,20 @@ services:
     networks:
       - energia_network
 
-  # 3. Backend Principal (Spring Boot)
   api-backend:
     build:
       context: ./backend
     container_name: lumen_api
     restart: always
     ports:
-      # Puxa a porta do .env. Se não existir, usa a 8080 por padrão
       - "${API_PORT:-8080}:8080"
+    env_file:
+      - .env
     environment:
-      # Injetando as variáveis no Spring Boot
-      - SPRING_DATASOURCE_URL=${DB_URL}
-      - SPRING_DATASOURCE_USERNAME=${DB_USER}
-      - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
       - ML_SERVICE_URL=http://ml-service:8000
-      - DB_API_OBRIGATORIA=http://ml-service:8000/api/v1/analise-energetica
-      - DB_API_USUARIO_LOGADO=http://ml-service:8000/api/v1/teste/analise-energetica
+      - API_TOKEN_SECRET=${API_TOKEN_SECRET} 
+      - ML_API_ENDPOINT_OBRIGATORIO=http://ml-service:8000/api/v1/teste/analise-energetica
+      - ML_API_ENDPOINT_PRINCIPAL=http://ml-service:8000/api/v1/analise-energetica
     depends_on:
       - mysql-db
       - ml-service

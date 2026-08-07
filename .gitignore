@@ -18,9 +18,9 @@ yarn-error.log*
 # ========================
 # Back-End (Java / Spring Boot)
 # ========================
-backend-api/target/
-backend-api/bin/
-backend-api/.mvn/
+backend/target/
+backend/bin/
+backend/.mvn/
 *.class
 *.jar
 *.war

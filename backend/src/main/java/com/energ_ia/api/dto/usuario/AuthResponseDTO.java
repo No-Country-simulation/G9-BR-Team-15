@@ -6,5 +6,6 @@ public record AuthResponseDTO(
     @JsonProperty("id") Long id,
     @JsonProperty("nome") String nome,
     @JsonProperty("email") String email,
-    @JsonProperty("mensagem") String mensagem
+    @JsonProperty("mensagem") String mensagem,
+    @JsonProperty("token") String token
 ) {}

@@ -1,25 +1,47 @@
 package com.energ_ia.api.domain.usuario;
 
-import com.energ_ia.api.domain.cliente.Cliente;
-import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
+
+import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import com.energ_ia.api.domain.cliente.Cliente;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "Usuario")
-public class Usuario {
+@Getter
+@Setter
+@NoArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+public class Usuario implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Include
     private Long id;
 
-    @Column(nullable = false, unique = true, length = 255)
+    @Column(nullable = false)
+    private String nome;
+
+    @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(name = "senha_hash", nullable = false, length = 255)
+    @Column(name = "senha_hash", nullable = false)
     private String senhaHash;
-
-    private String nome;
 
     @Column(name = "criado_em", updatable = false)
     private LocalDateTime criadoEm;
@@ -32,22 +54,41 @@ public class Usuario {
         criadoEm = LocalDateTime.now();
     }
 
-    // Getters e Setters manuais
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    @Override
+    @NonNull
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+    }
 
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
+    @Override
+    @NonNull
+    public String getPassword() {
+        return this.senhaHash;
+    }
 
-    public String getSenhaHash() { return senhaHash; }
-    public void setSenhaHash(String senhaHash) { this.senhaHash = senhaHash; }
+    @Override
+    @NonNull
+    public String getUsername() {
+        return this.email;
+    }
 
-    public String getNome() { return nome; }
-    public void setNome(String nome) { this.nome = nome; }
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
 
-    public LocalDateTime getCriadoEm() { return criadoEm; }
-    public void setCriadoEm(LocalDateTime criadoEm) { this.criadoEm = criadoEm; }
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
 
-    public List<Cliente> getClientes() { return clientes; }
-    public void setClientes(List<Cliente> clientes) { this.clientes = clientes; }
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }

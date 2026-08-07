@@ -1,6 +1,6 @@
 package com.energ_ia.api.service;
 
-import com.energ_ia.api.domain.cliente.MLApiCliente;
+import com.energ_ia.api.infra.client.mlservice.MLApiCliente;
 import com.energ_ia.api.dto.avaliacao.AnaliseRequisicaoDTO;
 import com.energ_ia.api.dto.avaliacao.AnaliseResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;

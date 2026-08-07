@@ -1,4 +1,4 @@
-package com.energ_ia.api.domain.cliente;
+package com.energ_ia.api.infra.client.mlservice;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

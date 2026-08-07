@@ -40,17 +40,4 @@ public class ClienteEquipamento {
     @Column(name = "dias_uso_mes", nullable = false)
     private Integer diasUsoMes;
 
-    // Getters e Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-    public Cliente getCliente() { return cliente; }
-    public void setCliente(Cliente cliente) { this.cliente = cliente; }
-    public EquipamentoCatalogo getEquipamentoCatalogo() { return equipamentoCatalogo; }
-    public void setEquipamentoCatalogo(EquipamentoCatalogo equipamentoCatalogo) { this.equipamentoCatalogo = equipamentoCatalogo; }
-    public Integer getQuantidade() { return quantidade; }
-    public void setQuantidade(Integer quantidade) { this.quantidade = quantidade; }
-    public BigDecimal getHorasUsoDiario() { return horasUsoDiario; }
-    public void setHorasUsoDiario(BigDecimal horasUsoDiario) { this.horasUsoDiario = horasUsoDiario; }
-    public Integer getDiasUsoMes() { return diasUsoMes; }
-    public void setDiasUsoMes(Integer diasUsoMes) { this.diasUsoMes = diasUsoMes; }
 }

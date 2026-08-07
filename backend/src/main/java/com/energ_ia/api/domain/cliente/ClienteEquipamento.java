@@ -34,8 +34,8 @@ public class ClienteEquipamento {
     @Column(nullable = false)
     private Integer quantidade = 1;
 
-    @Column(name = "horas_uso_diario", nullable = false, precision = 4, scale = 2)
-    private BigDecimal horasUsoDiario;
+    @Column(name = "horas_uso_diario", nullable = false, columnDefinition = "DECIMAL(4,2)")
+    private Double horasUsoDiario;
 
     @Column(name = "dias_uso_mes", nullable = false)
     private Integer diasUsoMes;

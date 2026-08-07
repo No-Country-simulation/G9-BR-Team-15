@@ -9,6 +9,6 @@ public record ClienteEquipamentoResponseDTO(
         String modelo,
         Integer potenciaWatts,
         Integer quantidade,
-        BigDecimal horasUsoDiario,
+        Double horasUsoDiario,
         Integer diasUsoMes
 ) {}

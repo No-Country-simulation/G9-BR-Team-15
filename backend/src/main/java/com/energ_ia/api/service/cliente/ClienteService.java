@@ -74,9 +74,8 @@ public class ClienteService {
         return clienteMapper.toResponseDTO(clienteSalvo);
     }
 
-    public List<ClienteResponseDTO> listarTodos() {
-        return clienteRepository.findAll().stream()
-                // Usamos o mapper para traduzir cada cliente da lista
+    public List<ClienteResponseDTO> listarPorUsuario(Usuario usuarioLogado) {
+        return clienteRepository.findByUsuario(usuarioLogado).stream()
                 .map(clienteMapper::toResponseDTO)
                 .collect(Collectors.toList());
     }

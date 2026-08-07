@@ -1,8 +1,8 @@
 package com.energ_ia.api.service;
 
 import com.energ_ia.api.infra.client.mlservice.MLApiCliente;
-import com.energ_ia.api.dto.avaliacao.AnaliseRequisicaoDTO;
-import com.energ_ia.api.dto.avaliacao.AnaliseResponseDTO;
+import com.energ_ia.api.dto.avaliacao.TesteAnaliseRequisicaoDTO;
+import com.energ_ia.api.dto.avaliacao.TesteAnaliseResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,11 +12,11 @@ public class AnaliseService {
     @Autowired
     private MLApiCliente mlApiCliente;
 
-    public AnaliseResponseDTO analisarConsumo(AnaliseRequisicaoDTO request) {
+    public TesteAnaliseResponseDTO analisarConsumo(TesteAnaliseRequisicaoDTO request) {
         validarRequest(request);
-        AnaliseResponseDTO response = mlApiCliente.chamarApiObrigatoria(request);
+        TesteAnaliseResponseDTO response = mlApiCliente.chamarApiObrigatoria(request);
         Double custo = request.consumoKwh() * 0.75;
-        return new AnaliseResponseDTO(
+        return new TesteAnaliseResponseDTO(
             response.categoria(),
             response.probabilidade(),
             response.recomendacoes(),
@@ -24,7 +24,7 @@ public class AnaliseService {
         );
     }
 
-    private void validarRequest(AnaliseRequisicaoDTO request) {
+    private void validarRequest(TesteAnaliseRequisicaoDTO request) {
         if (request.consumoKwh() == null || request.consumoKwh() <= 0) {
             throw new IllegalArgumentException("Consumo kWh deve ser maior que zero");
         }

@@ -37,8 +37,9 @@ public class ClienteController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ClienteResponseDTO>> listar() {
-        return ResponseEntity.ok(service.listarTodos());
+    public ResponseEntity<List<ClienteResponseDTO>> listar(@AuthenticationPrincipal Usuario usuarioLogado) {
+        List<ClienteResponseDTO> clientes = service.listarPorUsuario(usuarioLogado);
+        return ResponseEntity.ok(clientes);
     }
 
     @GetMapping("/{id}")

@@ -12,7 +12,7 @@ public record ClienteEquipamentoRequestDTO(
         Integer quantidade,
 
         @NotNull
-        BigDecimal horasUsoDiario,
+        Double horasUsoDiario,
 
         @NotNull
         Integer diasUsoMes

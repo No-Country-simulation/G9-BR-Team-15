@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public record AnaliseRequisicaoDTO(
+public record TesteAnaliseRequisicaoDTO(
     @JsonProperty("consumo_kwh")
     @JsonAlias({"consumoKwh"})
     Integer consumoKwh,

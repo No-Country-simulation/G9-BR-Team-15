@@ -4,6 +4,7 @@ import com.energ_ia.api.domain.equipamento.EquipamentoCatalogo;
 import com.energ_ia.api.dto.equipamento.EquipamentoRequestDTO;
 import com.energ_ia.api.dto.equipamento.EquipamentoResponseDTO;
 import com.energ_ia.api.infra.repository.equipamento.EquipamentoRepository;
+import com.energ_ia.api.mapper.EquipamentoMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -19,8 +20,16 @@ public class EquipamentoService {
 
     private final EquipamentoRepository repository;
 
+    private final EquipamentoMapper mapper;
+
     @Transactional
     public EquipamentoResponseDTO cadastrar(EquipamentoRequestDTO dto) {
+        if (repository.existsByTipoAndMarcaAndModelo(dto.tipo(), dto.marca(), dto.modelo())) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "Um equipamento dessa marca e modelo já está cadastrado no catálogo!"
+            );
+        }
 
         var novoEquipamento = new EquipamentoCatalogo(
                 dto.tipo(),
@@ -31,13 +40,13 @@ public class EquipamentoService {
 
         var equipamentoSalvo = repository.save(novoEquipamento);
 
-        return new EquipamentoResponseDTO(equipamentoSalvo);
+        return mapper.toResponseDTO(equipamentoSalvo);
     }
 
     @Transactional(readOnly = true)
     public List<EquipamentoResponseDTO> listarTodos() {
         return repository.findAll().stream()
-                .map(EquipamentoResponseDTO::new)
+                .map(mapper::toResponseDTO)
                 .collect(Collectors.toList());
     }
 
@@ -46,6 +55,6 @@ public class EquipamentoService {
         var equipamento = repository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Equipamento não encontrado!"));
 
-        return new EquipamentoResponseDTO(equipamento);
+        return mapper.toResponseDTO(equipamento);
     }
 }

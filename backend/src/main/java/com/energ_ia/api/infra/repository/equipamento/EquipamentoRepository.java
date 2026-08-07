@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface EquipamentoRepository extends JpaRepository<EquipamentoCatalogo, Long> {
+
+    boolean existsByTipoAndMarcaAndModelo(String tipo, String marca, String modelo);
 }

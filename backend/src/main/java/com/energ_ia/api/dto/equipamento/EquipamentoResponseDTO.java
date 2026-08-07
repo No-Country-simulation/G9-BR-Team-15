@@ -9,7 +9,4 @@ public record EquipamentoResponseDTO(
         String modelo,
         Integer potenciaWatts
 ) {
-    public EquipamentoResponseDTO(EquipamentoCatalogo equipamentoSalvo) {
-        this(equipamentoSalvo.getId(), equipamentoSalvo.getTipo(), equipamentoSalvo.getMarca(), equipamentoSalvo.getModelo(), equipamentoSalvo.getPotenciaWatts());
-    }
 }

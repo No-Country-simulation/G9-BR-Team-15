@@ -10,7 +10,7 @@ import lombok.Setter;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "Consumo_Mensal")
+@Table(name = "Consumo_Mensal", uniqueConstraints = @UniqueConstraint(columnNames = {"id_cliente", "mes_referencia"}))
 @Getter
 @Setter
 @NoArgsConstructor
@@ -29,10 +29,13 @@ public class ConsumoMensal {
     @Column(name = "consumo_previsto_kwh")
     private Double consumoPrevistoKwh;
 
+    @Column(name = "consumo_estimado_ia_kwh")
+    private Double consumoEstimadoIaKwh;
+
     @Column(name = "consumo_registrado_kwh")
     private Double consumoRegistradoKwh;
 
-    @Column(name = "mes_referencia", nullable = false, unique = true)
+    @Column(name = "mes_referencia", nullable = false)
     private LocalDate mesReferencia;
 
 }

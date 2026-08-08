@@ -1,6 +1,6 @@
 package com.energ_ia.api.controller;
 
-import com.energ_ia.api.dto.avaliacao.AnaliseRequisicaoDTO;
+import com.energ_ia.api.dto.avaliacao.TesteAnaliseRequestDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,7 +25,7 @@ public class AnaliseControllerTest {
                 }
                 """;
 
-        AnaliseRequisicaoDTO dto = objectMapper.readValue(jsonRequest, AnaliseRequisicaoDTO.class);
+        TesteAnaliseRequestDTO dto = objectMapper.readValue(jsonRequest, TesteAnaliseRequestDTO.class);
 
         assertNotNull(dto);
         assertEquals(420, dto.consumoKwh());

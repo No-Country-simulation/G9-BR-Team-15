@@ -2,27 +2,29 @@ package com.energ_ia.api.dto.avaliacao;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public record TesteAnaliseRequisicaoDTO(
-    @JsonProperty("consumo_kwh")
-    @JsonAlias({"consumoKwh"})
-    Integer consumoKwh,
+public record TesteAnaliseRequestDTO(
 
-    @JsonProperty("uso_horario_pico")
-    @JsonAlias({"usoHorarioPico"})
-    Boolean usoHorarioPico,
+        @NotNull(message = "O consumo é obrigatório")
+        @Positive(message = "Consumo kWh deve ser maior que zero")
+        @JsonAlias({"consumo_kwh", "consumoKwh"})
+        Integer consumoKwh,
 
-    @JsonProperty("quantidade_equipamentos")
-    @JsonAlias({"quantidadeEquipamentos"})
-    Integer quantidadeEquipamentos,
+        @JsonAlias({"uso_horario_pico", "usoHorarioPico"})
+        Boolean usoHorarioPico,
 
-    @JsonProperty("tipo_imovel")
-    @JsonAlias({"tipoImovel"})
-    String tipoImovel,
+        @NotNull(message = "A quantidade de equipamentos é obrigatória")
+        @Min(value = 0, message = "Quantidade de equipamentos não pode ser negativa")
+        @JsonAlias({"quantidade_equipamentos", "quantidadeEquipamentos"})
+        Integer quantidadeEquipamentos,
 
-    @JsonProperty("horas_alto_consumo")
-    @JsonAlias({"horasAltoConsumo"})
-    Integer horasAltoConsumo
+        @JsonAlias({"tipo_imovel", "tipoImovel"})
+        String tipoImovel,
+
+        @JsonAlias({"horas_alto_consumo", "horasAltoConsumo"})
+        Integer horasAltoConsumo
 ) {}

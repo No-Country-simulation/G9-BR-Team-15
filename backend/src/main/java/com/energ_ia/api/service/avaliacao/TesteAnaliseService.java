@@ -1,35 +1,30 @@
-package com.energ_ia.api.service;
+package com.energ_ia.api.service.avaliacao;
 
 import com.energ_ia.api.infra.client.mlservice.MLApiCliente;
-import com.energ_ia.api.dto.avaliacao.TesteAnaliseRequisicaoDTO;
+import com.energ_ia.api.dto.avaliacao.TesteAnaliseRequestDTO;
 import com.energ_ia.api.dto.avaliacao.TesteAnaliseResponseDTO;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
-public class AnaliseService {
+@RequiredArgsConstructor
+public class TesteAnaliseService {
 
-    @Autowired
-    private MLApiCliente mlApiCliente;
+    private final MLApiCliente mlApiCliente;
 
-    public TesteAnaliseResponseDTO analisarConsumo(TesteAnaliseRequisicaoDTO request) {
-        validarRequest(request);
-        TesteAnaliseResponseDTO response = mlApiCliente.chamarApiObrigatoria(request);
-        Double custo = request.consumoKwh() * 0.75;
+    private static final double TARIFA_KWH = 0.75;
+
+    public TesteAnaliseResponseDTO analisarConsumo(TesteAnaliseRequestDTO request) {
+
+        TesteAnaliseResponseDTO responseML = mlApiCliente.chamarApiObrigatoria(request);
+
+        Double custoEstimado = request.consumoKwh() * TARIFA_KWH;
+
         return new TesteAnaliseResponseDTO(
-            response.categoria(),
-            response.probabilidade(),
-            response.recomendacoes(),
-            custo
+                responseML.categoria(),
+                responseML.probabilidade(),
+                responseML.recomendacoes(),
+                custoEstimado
         );
-    }
-
-    private void validarRequest(TesteAnaliseRequisicaoDTO request) {
-        if (request.consumoKwh() == null || request.consumoKwh() <= 0) {
-            throw new IllegalArgumentException("Consumo kWh deve ser maior que zero");
-        }
-        if (request.quantidadeEquipamentos() == null || request.quantidadeEquipamentos() < 0) {
-            throw new IllegalArgumentException("Quantidade de equipamentos não pode ser negativa");
-        }
     }
 }

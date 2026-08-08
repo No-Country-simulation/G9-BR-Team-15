@@ -3,7 +3,7 @@ package com.energ_ia.api.dto.avaliacao;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-public record AnaliseResponseDTO(
+public record TesteAnaliseResponseDTO(
     @JsonProperty("categoria") String categoria,
     @JsonProperty("probabilidade") Double probabilidade,
     @JsonProperty("recomendacoes") List<String> recomendacoes,

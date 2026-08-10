@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-    console.log("scratch.js carregado, encontrados:", document.querySelectorAll("[data-scratch]").length);
     document.querySelectorAll("[data-scratch]").forEach((canvas) => setupScratch(canvas));
 });
 
@@ -11,7 +10,6 @@ function setupScratch(canvas) {
 
     function resize() {
         const rect = wrap.getBoundingClientRect();
-        console.log("tamanho do wrap:", rect.width, rect.height);
         canvas.width = rect.width;
         canvas.height = rect.height;
         paintScratchLayer();
@@ -20,12 +18,12 @@ function setupScratch(canvas) {
     function paintScratchLayer() {
         ctx.globalCompositeOperation = "source-over";
         const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
-        gradient.addColorStop(0, "#a8d5c4");   
-        gradient.addColorStop(1, "#7fb8a0");   
+        gradient.addColorStop(0, "#a8d5c4");
+        gradient.addColorStop(1, "#7fb8a0");
         ctx.fillStyle = gradient;
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        ctx.fillStyle = "#0e4c3c";  
+        ctx.fillStyle = "#0e4c3c";
         ctx.font = `bold ${Math.max(14, canvas.width * 0.09)}px Lato, sans-serif`;
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";

@@ -36,4 +36,8 @@ public class EquipamentoCatalogo {
         this.modelo = modelo;
         this.potenciaWatts = integer;
     }
+
+    public void setModelos(String modelo) {
+        this.modelo = modelo;
+    }
 }

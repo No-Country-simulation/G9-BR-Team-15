@@ -1,5 +1,7 @@
 package com.energ_ia.api.domain.cliente;
 
+import com.energ_ia.api.domain.avaliacao.AvaliacaoEficiencia;
+import com.energ_ia.api.domain.consumo.ConsumoMensal;
 import com.energ_ia.api.domain.core.TipoImovel;
 import com.energ_ia.api.domain.core.TipoPessoa;
 import com.energ_ia.api.domain.usuario.Usuario;
@@ -69,6 +71,12 @@ public class Cliente {
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ClienteEquipamento> equipamentos = new ArrayList<>();
 
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ConsumoMensal> consumos = new ArrayList<>();
+
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<AvaliacaoEficiencia> avaliacoes = new ArrayList<>();
+
     public String toString() {
         return "Cliente{" +
                 ", usuario=" + (usuario != null ? usuario.getId() : null) +
@@ -84,4 +92,8 @@ public class Cliente {
                 ", criadoEm=" + criadoEm +
                 '}';
     }
-} 
+
+    public void setDesativado_em(LocalDateTime now) {
+        this.desativadoEm = now;
+    }
+}

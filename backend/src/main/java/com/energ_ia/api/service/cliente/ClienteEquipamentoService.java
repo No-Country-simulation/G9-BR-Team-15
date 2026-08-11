@@ -5,6 +5,7 @@ import com.energ_ia.api.domain.cliente.ClienteEquipamento;
 import com.energ_ia.api.domain.equipamento.EquipamentoCatalogo;
 import com.energ_ia.api.dto.cliente.ClienteEquipamentoRequestDTO;
 import com.energ_ia.api.dto.cliente.ClienteEquipamentoResponseDTO;
+import com.energ_ia.api.dto.cliente.ClienteEquipamentoAtualizacaoDTO;
 import com.energ_ia.api.infra.repository.cliente.ClienteEquipamentoRepository;
 import com.energ_ia.api.infra.repository.cliente.ClienteRepository;
 import com.energ_ia.api.infra.repository.equipamento.EquipamentoRepository;
@@ -79,6 +80,7 @@ public class ClienteEquipamentoService {
         EquipamentoCatalogo catalogo = entity.getEquipamentoCatalogo();
 
         return new ClienteEquipamentoResponseDTO(
+                entity.getId(),
                 catalogo.getId(),
                 catalogo.getTipo(),
                 catalogo.getMarca(),
@@ -88,5 +90,33 @@ public class ClienteEquipamentoService {
                 entity.getHorasUsoDiario(),
                 entity.getDiasUsoMes()
         );
+    }
+
+    @Transactional
+    public void atualizarEquipamentoCliente(Long clienteEquipamentoId, ClienteEquipamentoAtualizacaoDTO dados) {
+        ClienteEquipamento ce = clienteEquipamentoRepository.findById(clienteEquipamentoId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Associação de equipamento não encontrada!"));
+
+        if (dados.quantidade() != null) {
+            ce.setQuantidade(dados.quantidade());
+        }
+
+        if (dados.horasUsoDiario() != null) {
+            ce.setHorasUsoDiario(dados.horasUsoDiario());
+        }
+
+        if (dados.diasUsoMes() != null) {
+            ce.setDiasUsoMes(dados.diasUsoMes());
+        }
+
+        clienteEquipamentoRepository.save(ce);
+    }
+
+    @Transactional
+    public void removerEquipamentoDoCliente(Long clienteEquipamentoId) {
+        if (!clienteEquipamentoRepository.existsById(clienteEquipamentoId)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Equipamento não vinculado ao cliente!");
+        }
+        clienteEquipamentoRepository.deleteById(clienteEquipamentoId);
     }
 }

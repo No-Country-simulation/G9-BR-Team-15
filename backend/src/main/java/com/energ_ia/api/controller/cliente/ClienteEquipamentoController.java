@@ -2,6 +2,7 @@ package com.energ_ia.api.controller.cliente;
 
 import com.energ_ia.api.dto.cliente.ClienteEquipamentoRequestDTO;
 import com.energ_ia.api.dto.cliente.ClienteEquipamentoResponseDTO;
+import com.energ_ia.api.dto.cliente.ClienteEquipamentoAtualizacaoDTO;
 import com.energ_ia.api.service.cliente.ClienteEquipamentoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -42,6 +43,12 @@ public class ClienteEquipamentoController {
             @PathVariable Long equipamentoId) {
 
         service.removerEquipamento(clienteId, equipamentoId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{clienteEquipamentoId}")
+    public ResponseEntity<Void> atualizarEquipamento(@PathVariable Long clienteEquipamentoId, @RequestBody @Valid ClienteEquipamentoAtualizacaoDTO dados) {
+        service.atualizarEquipamentoCliente(clienteEquipamentoId, dados);
         return ResponseEntity.noContent().build();
     }
 }

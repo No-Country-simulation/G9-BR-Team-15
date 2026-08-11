@@ -1,8 +1,7 @@
 package com.energ_ia.api.dto.cliente;
 
-import java.math.BigDecimal;
-
 public record ClienteEquipamentoResponseDTO(
+        Long id,
         Long equipamentoId,
         String tipo,
         String marca,

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -26,9 +27,15 @@ public class ConsumoService {
         Cliente cliente = clienteRepository.findById(clienteId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não encontrado!"));
 
+        LocalDate mesNormalizado = dados.mesReferencia().withDayOfMonth(1);
+
+        if (repository.existsByClienteIdAndMesReferencia(clienteId, mesNormalizado)) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Já existe um registro de consumo para este mês!");
+        }
+
         ConsumoMensal consumo = new ConsumoMensal();
         consumo.setCliente(cliente);
-        consumo.setMesReferencia(dados.mesReferencia());
+        consumo.setMesReferencia(mesNormalizado);
         consumo.setConsumoRegistradoKwh(dados.consumoRegistradoKwh());
 
         repository.save(consumo);

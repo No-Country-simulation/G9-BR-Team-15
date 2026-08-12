@@ -14,4 +14,6 @@ public interface ConsumoMensalRepository extends JpaRepository<ConsumoMensal, Lo
     Optional<ConsumoMensal> findByClienteAndMesReferencia(Cliente cliente, LocalDate mesAtual);
 
     List<ConsumoMensal> findByClienteId(Long clienteId);
+
+    boolean existsByClienteIdAndMesReferencia(Long clienteId, LocalDate mesNormalizado);
 }

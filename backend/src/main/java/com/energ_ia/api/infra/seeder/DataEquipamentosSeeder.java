@@ -1,4 +1,4 @@
-package com.energ_ia.api.infra.config;
+package com.energ_ia.api.infra.seeder;
 
 import com.energ_ia.api.domain.equipamento.EquipamentoCatalogo;
 import com.energ_ia.api.infra.repository.equipamento.EquipamentoRepository;
@@ -11,7 +11,7 @@ import java.util.List;
 
 @Configuration
 @RequiredArgsConstructor
-public class DataSeeder {
+public class DataEquipamentosSeeder {
 
     private final EquipamentoRepository equipamentoRepository;
 

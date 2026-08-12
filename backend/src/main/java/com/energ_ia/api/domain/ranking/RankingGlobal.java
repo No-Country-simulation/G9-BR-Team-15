@@ -12,7 +12,9 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "Ranking_Global")
+@Table(name = "Ranking_Global", uniqueConstraints = {
+        @UniqueConstraint(name = "uk_cliente_tipo_ranking", columnNames = {"id_cliente", "tipo_ranking"})
+})
 @Getter
 @Setter
 @NoArgsConstructor
@@ -24,8 +26,8 @@ public class RankingGlobal {
     @EqualsAndHashCode.Include
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_cliente", nullable = false, unique = true)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_cliente", nullable = false)
     private Cliente cliente;
 
     @Column(name = "localidade", nullable = false)

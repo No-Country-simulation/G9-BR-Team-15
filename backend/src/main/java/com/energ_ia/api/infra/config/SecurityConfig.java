@@ -32,6 +32,8 @@ public class SecurityConfig {
                     req.requestMatchers(HttpMethod.POST, "/auth/register").permitAll();
                     req.requestMatchers(HttpMethod.GET, "/equipamentos").permitAll();
                     req.requestMatchers(HttpMethod.POST, "/equipamentos").permitAll();
+                    req.requestMatchers(HttpMethod.GET, "/rankings/top10").permitAll();
+                    req.requestMatchers(HttpMethod.POST, "/rankings/calcular").permitAll();
                     req.requestMatchers(
                             "/teste/analise-energetica",
                             "/error").permitAll();

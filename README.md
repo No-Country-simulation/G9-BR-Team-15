@@ -90,7 +90,11 @@ docker compose down
  **As solicitações da API Java principal para a API do modelo de IA devem ser feitas na url "http://ml-service:8000/api/v1/" + "endpoint-que-deseja-utilizar".**
 
  **Exemplos válidos: "http://ml-service:8000/api/v1/teste/analise-energetica" e "http://ml-service:8000/api/v1/analise-energetica". O serviço também aceita os aliases curtos "/teste-analise-energetica" e "/analise-energetica".**
+
+ **Após subir os containers com Docker, toda as rotas disponiveis podem ser verificadas e testadas em: http://localhost:8080/swagger-ui.html**
+
  ## Rotas da API
+
 
 ### 1. Teste da plataforma com requisitos obrigatórios do hackthon
 <br>

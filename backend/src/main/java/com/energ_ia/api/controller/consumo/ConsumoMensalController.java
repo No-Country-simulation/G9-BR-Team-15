@@ -1,5 +1,6 @@
 package com.energ_ia.api.controller.consumo;
 
+import com.energ_ia.api.dto.consumo.ConsumoAtualizacaoRequestDTO;
 import com.energ_ia.api.dto.consumo.ConsumoRequestDTO;
 import com.energ_ia.api.dto.consumo.ConsumoResponseDTO;
 import com.energ_ia.api.service.consumo.ConsumoService;
@@ -36,7 +37,7 @@ public class ConsumoMensalController {
     public ResponseEntity<ConsumoResponseDTO> atualizar(
             @PathVariable Long clienteId,
             @PathVariable Long consumoId,
-            @RequestBody @Valid ConsumoRequestDTO dados) {
+            @RequestBody @Valid ConsumoAtualizacaoRequestDTO dados) {
         ConsumoResponseDTO response = service.atualizar(clienteId, consumoId, dados);
         return ResponseEntity.ok(response);
     }

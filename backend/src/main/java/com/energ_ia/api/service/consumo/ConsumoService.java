@@ -2,6 +2,7 @@ package com.energ_ia.api.service.consumo;
 
 import com.energ_ia.api.domain.cliente.Cliente;
 import com.energ_ia.api.domain.consumo.ConsumoMensal;
+import com.energ_ia.api.dto.consumo.ConsumoAtualizacaoRequestDTO;
 import com.energ_ia.api.dto.consumo.ConsumoRequestDTO;
 import com.energ_ia.api.dto.consumo.ConsumoResponseDTO;
 import com.energ_ia.api.infra.repository.cliente.ClienteRepository;
@@ -52,7 +53,7 @@ public class ConsumoService {
     }
 
     @Transactional
-    public ConsumoResponseDTO atualizar(Long clienteId, Long consumoId, ConsumoRequestDTO dados) {
+    public ConsumoResponseDTO atualizar(Long clienteId, Long consumoId, ConsumoAtualizacaoRequestDTO dados) {
         ConsumoMensal consumo = repository.findById(consumoId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Registro de consumo não encontrado!"));
 
@@ -60,11 +61,17 @@ public class ConsumoService {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Este consumo não pertence ao cliente informado.");
         }
 
-        if (dados.mesReferencia() != null) consumo.setMesReferencia(dados.mesReferencia());
-        if (dados.consumoRegistradoKwh() != null) consumo.setConsumoRegistradoKwh(dados.consumoRegistradoKwh());
+        // Como a data agora é opcional na atualização, só altera se o usuário mandou
+        if (dados.mesReferencia() != null) {
+            consumo.setMesReferencia(dados.mesReferencia().withDayOfMonth(1));
+        }
+
+        if (dados.consumoRegistradoKwh() != null) {
+            consumo.setConsumoRegistradoKwh(dados.consumoRegistradoKwh());
+        }
 
         repository.save(consumo);
-        return mapearParaDTO(consumo);
+        return mapearParaDTO(consumo); // Agora bate perfeitamente com o ConsumoResponseDTO
     }
 
     @Transactional

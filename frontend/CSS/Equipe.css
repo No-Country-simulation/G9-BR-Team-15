@@ -193,20 +193,6 @@ body {
     margin-bottom: 0;   
 }
 
-.membro__scratch {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    cursor: grab;
-    touch-action: none; 
-}
-
-.membro__scratch.revealed {
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.5s ease;
-}
 
 @media (min-width: 769px) {
     html {

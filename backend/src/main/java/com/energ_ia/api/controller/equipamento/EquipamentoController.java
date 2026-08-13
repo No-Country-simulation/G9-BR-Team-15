@@ -1,8 +1,11 @@
 package com.energ_ia.api.controller.equipamento;
 
+import com.energ_ia.api.domain.equipamento.EquipamentoCatalogo;
+import com.energ_ia.api.dto.equipamento.EquipamentoCatalogoAtualizacaoDTO;
 import com.energ_ia.api.dto.equipamento.EquipamentoRequestDTO;
 import com.energ_ia.api.dto.equipamento.EquipamentoResponseDTO;
 import com.energ_ia.api.service.equipamento.EquipamentoService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,5 +41,19 @@ public class EquipamentoController {
     @GetMapping("/{id}")
     public ResponseEntity<EquipamentoResponseDTO> buscar(@PathVariable Long id) {
         return ResponseEntity.ok(service.buscarPorId(id));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<EquipamentoCatalogo> atualizar(
+            @PathVariable Long id,
+            @RequestBody @Valid EquipamentoCatalogoAtualizacaoDTO dados) {
+        EquipamentoCatalogo atualizado = service.atualizar(id, dados);
+        return ResponseEntity.ok(atualizado);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> excluir(@PathVariable Long id) {
+        service.excluir(id);
+        return ResponseEntity.noContent().build();
     }
 }

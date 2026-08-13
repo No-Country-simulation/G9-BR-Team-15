@@ -1,19 +1,37 @@
-# ============================
-#Importação das bibliotecas necessárias
-# ============================
+# ============================================================
+# ⚡ EnerSmart AI Dashboard
+#
+# Dashboard analítico baseado nas previsões geradas
+# pelo modelo de Machine Learning.
+#
+# Objetivos:
+# - Avaliar classificação energética dos clientes
+# - Medir confiança da IA
+# - Analisar consumo estimado
+# - Avaliar impacto financeiro
+#
+# Hackathon Energy
+# ============================================================
+
+
+# ============================================================
+# 1. Bibliotecas
+# ============================================================
 
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 import plotly.io as pio
-import numpy as np
-import os
 
 from plotly.subplots import make_subplots
+from pathlib import Path
 
-# ============================
-# Tema Profissional EnerSmart
-# ============================
+
+
+# ============================================================
+# 2. Identidade Visual EnerSmart
+# ============================================================
+
 
 CORES = {
 
@@ -26,228 +44,378 @@ CORES = {
     "verde_claro": "#76D7C4",
 
     "cinza": "#F5F8F7"
+
 }
 
+
+
+PALETA_ENERSMART = [
+
+    CORES["verde_principal"],
+
+    CORES["verde_energia"],
+
+    CORES["verde_claro"],
+
+    CORES["verde_escuro"]
+
+]
+
+
+
 pio.templates["Lu | Men Dashboard"] = go.layout.Template(
+
     layout=go.Layout(
 
+
         font=dict(
+
             family="Arial",
+
             size=14,
+
             color=CORES["verde_principal"]
+
         ),
+
+
 
         title=dict(
+
             font=dict(
+
                 size=22,
+
                 color=CORES["verde_principal"]
+
             ),
+
             x=0.05
+
         ),
 
-        paper_bgcolor="#F5F8F7",
+
+
+        paper_bgcolor=CORES["cinza"],
+
 
         plot_bgcolor="white",
 
+
+
         hoverlabel=dict(
+
             bgcolor="white",
+
             font_size=13,
+
             font_family="Arial"
+
         ),
+
+
 
         margin=dict(
+
             l=50,
+
             r=50,
+
             t=80,
+
             b=50
+
         ),
 
+
+
         xaxis=dict(
-    showgrid=True,
-    gridcolor="#E8F2EF"
-),
 
-yaxis=dict(
-    showgrid=False
-)
+            showgrid=True,
+
+            gridcolor="#E8F2EF"
+
+        ),
+
+
+
+        yaxis=dict(
+
+            showgrid=False
+
+        )
+
     )
+
 )
 
-pio.templates.default="Lu | Men Dashboard"
 
-# ============================
-# Paleta
-# ============================
-PALETA_ENERSMART = [
-    "#006455",
-    "#00A878",
-    "#76D7C4",
-    "#003B32"
-]
 
-# ============================
-# Carregar base para Dashboard
-# ============================
-from pathlib import Path
+pio.templates.default = "Lu | Men Dashboard"
+
+
+
+
+# ============================================================
+# 3. Carregamento da base IA
+# ============================================================
 
 
 def carregar_base_dashboard():
 
+    """
+    Carrega a base gerada pelo modelo ML.
+    """
+
+
     BASE_DIR = Path(__file__).resolve().parent.parent
 
-    arquivo = BASE_DIR / "data-science" / "consumo_original.csv"
+
+    arquivo = (
+
+        BASE_DIR /
+
+        "data-science" /
+
+        "previsoes.csv"
+
+    )
+
+
 
     if not arquivo.exists():
+
         raise FileNotFoundError(
+
             f"Arquivo não encontrado: {arquivo}"
+
         )
+
+
 
     df = pd.read_csv(arquivo)
 
-    print("✅ Base carregada para Dashboard!")
-    print(f"📂 Caminho: {arquivo}")
-    print(f"📊 Total de registros: {len(df)}")
+
+
+    print("=" * 45)
+
+    print("⚡ EnerSmart AI Dashboard")
+
+    print("=" * 45)
+
+    print("✅ Base carregada!")
+
+    print(f"📂 Arquivo: {arquivo}")
+
+    print(f"👥 Clientes analisados: {len(df)}")
+
+
 
     return df
 
+
+
+
 df = carregar_base_dashboard()
 
-# ============================
-# # Criado atributo temporal simulado para análise mensal
-# ============================
 
-np.random.seed(42)
 
-df["mes"] = np.random.choice(
-    [
-        "Jan", "Fev", "Mar", "Abr",
-        "Mai", "Jun", "Jul",
-        "Ago", "Set", "Out",
-        "Nov", "Dez"
-    ],
-    size=len(df)
-)
 
-# ============================
-# 1 - Indicadores do Dashboard
-# ============================
+# ============================================================
+# 4. Validação da estrutura da base
+# ============================================================
+
+
+COLUNAS_OBRIGATORIAS = [
+
+    "id_cliente",
+
+    "categoria",
+
+    "probabilidade",
+
+    "consumo_estimado_kwh",
+
+    "custo_estimado_mensal",
+
+    "recomendacoes"
+
+]
+
+
+
+for coluna in COLUNAS_OBRIGATORIAS:
+
+
+    if coluna not in df.columns:
+
+
+        raise ValueError(
+
+            f"Coluna obrigatória ausente: {coluna}"
+
+        )
+
+
+
+print("✅ Estrutura da base validada!")
+
+
+
+
+# ============================================================
+# 5. KPIs Inteligência Artificial
+# ============================================================
+
 
 total_clientes = len(df)
 
-consumo_total = df['consumo_kwh'].sum()
 
-consumo_medio = df['consumo_kwh'].mean()
 
-equipamentos_medios = df['quantidade_equipamentos'].mean()
+consumo_total = (
 
-tempo_medio = df['tempo_medio_uso_diario'].mean()
+    df["consumo_estimado_kwh"]
 
-eficientes = (df['perfil_energetico'] == 'Eficiente').sum()
+    .sum()
 
-moderados = (df['perfil_energetico'] == 'Moderado').sum()
+)
 
-ineficientes = (df['perfil_energetico'] == 'Ineficiente').sum()
 
-percentual_eficientes = (eficientes / total_clientes) * 100
 
-percentual_moderados = (moderados / total_clientes) * 100
+consumo_medio = (
 
-percentual_ineficientes = (ineficientes / total_clientes) * 100
+    df["consumo_estimado_kwh"]
 
-print("========== KPIs ==========")
+    .mean()
+
+)
+
+
+
+custo_total = (
+
+    df["custo_estimado_mensal"]
+
+    .sum()
+
+)
+
+
+
+confianca_media = (
+
+    df["probabilidade"]
+
+    .mean()
+
+    *100
+
+)
+
+
+
+
+print("\n========= KPIs =========")
+
 print(f"Clientes: {total_clientes}")
-print(f"Consumo Total: {consumo_total:.2f} kWh")
-print(f"Consumo Médio: {consumo_medio:.2f} kWh")
-print(f"Equipamentos Médios: {equipamentos_medios:.1f}")
-print(f"Tempo Médio de Uso: {tempo_medio:.1f} horas")
-print(f"% Clientes Eficientes: {percentual_eficientes:.1f}%")
-print(f"% Clientes Moderados: {percentual_moderados:.1f}%")
-print(f"% Clientes Ineficientes: {percentual_ineficientes:.1f}%")
+
+print(f"Consumo previsto: {consumo_total:,.2f} kWh")
+
+print(f"Consumo médio: {consumo_medio:,.2f} kWh")
+
+print(f"Custo estimado: R$ {custo_total:,.2f}")
+
+print(f"Confiança IA: {confianca_media:.2f}%")
 
 
-# ============================
-# card de contexto para apresentação
-# ============================
-print("""
-⚡ Lu | Men Dashboard
 
-Objetivo:
-Identificar padrões de consumo energético
-e oportunidades de eficiência.
+# ============================================================
+# 6. Estrutura Dashboard
+# ============================================================
 
-Inteligência Artificial:
-Modelo de classificação energética:
-
-🟢 Eficiente
-🟡 Moderado
-🔴 Ineficiente
-
-Base analisada:
-{} clientes
-""".format(total_clientes))
-
-# ============================
-# Layout Dashboard
-# ============================
 
 dashboard = make_subplots(
 
     rows=4,
+
     cols=2,
 
+
     specs=[
-        [{"type": "indicator"}, {"type": "bar"}],
 
-        [{"type": "bar"}, {"type": "pie"}],
+        [{"type":"indicator"},
+         {"type":"indicator"}],
 
-        [{"type": "bar"}, {"type": "scatter"}],
 
-        [{"type": "bar"}, {"type": "indicator"}]
+        [{"type":"pie"},
+         {"type":"bar"}],
+
+
+        [{"type":"bar"},
+         {"type":"scatter"}],
+
+
+        [{"type":"bar"},
+         {"type":"table"}]
+
     ],
 
-    subplot_titles=[
 
-        "Consumo Médio por Cliente",
+subplot_titles=[
 
-        "Consumo por Perfil",
+    "",
 
-        "Consumo por Cliente",
+    "",
 
-        "Distribuição dos Perfis",
+    "Classificação Energética IA",
 
-        "Quantidade de Clientes",
+    "Consumo Médio Previsto",
 
-        "Consumo x Horário Pico",
+    "Impacto Financeiro",
 
-        "Horas de Pico",
+    "Confiança IA x Consumo",
 
-        "Clientes Eficientes"
-    ]
+    "Top Consumidores",
+
+    "Recomendações"
+
+]
 )
+# ============================================================
+# 7. KPI - Quantidade de Clientes
+# ============================================================
 
-# ============================
-# 2-[Dashboard] Criar KPI de consumo mensal (kWh)
-# ============================
+
 dashboard.add_trace(
 
     go.Indicator(
 
         mode="number",
 
-        value=round(consumo_medio,1),
+        value=total_clientes,
+
 
         number={
-            "suffix":" kWh",
-            "font":{
-                "size":45,
-                "color":CORES["verde_principal"]
+
+            "font": {
+
+                "size": 45,
+
+                "color": CORES["verde_principal"]
+
             }
+
         },
 
+
         title={
-            "text":"<b>Consumo Médio por Cliente</b>"        }
+
+            "text": "<b>Clientes analisados</b>"
+
+        }
 
     ),
+
 
     row=1,
 
@@ -255,153 +423,222 @@ dashboard.add_trace(
 
 )
 
-# ============================
-# 3- [Dashboard] Criar gráfico de consumo energético
-# ============================
-
-consumo = df.groupby("perfil_energetico")["consumo_kwh"].mean().reset_index()
-
-fig = px.bar(
-    consumo,
-
-    y="perfil_energetico",
-
-    x="consumo_kwh",
-
-    orientation="h",
-
-    color="perfil_energetico",
-
-    color_discrete_sequence=PALETA_ENERSMART,
-
-    text_auto=".0f",
-
-    title="<b>Consumo Médio por Perfil Energético</b>"
-)
 
 
-fig.update_traces(
-    textposition="outside",
-    marker_line_width=1,
-    marker_line_color="white"
-)
+
+# ============================================================
+# 8. KPI - Confiança Média da IA
+# ============================================================
 
 
-fig.update_layout(
+dashboard.add_trace(
 
-    height=450,
+    go.Indicator(
 
-    showlegend=False,
+        mode="number",
 
-    xaxis_title="Média mensal kWh",
-
-    yaxis_title="Perfil Energético",
-
-    bargap=0.35
-
-)
-
-for trace in fig.data:
-
-    dashboard.add_trace(
-
-        trace,
-
-        row=1,
-
-        col=2
-
-    )
+        value=round(confianca_media,1),
 
 
-consumo_tipo = df.groupby("tipo_cliente")["consumo_kwh"].mean().reset_index()
+        number={
 
-fig = px.bar(
+            "suffix":"%",
 
-    consumo_tipo,
+            "font": {
 
-    y="tipo_cliente",
+                "size":45,
 
-    x="consumo_kwh",
+                "color":CORES["verde_energia"]
 
-    orientation="h",
+            }
 
-    color="tipo_cliente",
+        },
 
-    color_discrete_sequence=PALETA_ENERSMART,
 
-    text_auto=".0f",
+        title={
 
-    title="<b>Consumo Médio por Tipo de Cliente</b>"
+            "text":"<b>Confiança média IA</b>"
+
+        }
+
+    ),
+
+
+    row=1,
+
+    col=2
 
 )
 
 
-fig.update_traces(
-
-    textposition="outside",
-
-    marker_line_width=1,
-
-    marker_line_color="white"
-
-)
+# ============================================================
+# 9. Distribuição da Classificação IA
+# ============================================================
 
 
-fig.update_layout(
+perfil = (
 
-    height=450,
+    df["categoria"]
 
-    showlegend=False,
+    .value_counts()
 
-    xaxis_title="Consumo Médio (kWh)",
-
-    yaxis_title="Tipo de Cliente",
-
-    bargap=0.35
+    .reset_index()
 
 )
-for trace in fig.data:
-
-    dashboard.add_trace(
-        trace,
-        row=2,
-        col=1
-    )
 
 
-# ============================
-# 4 - [Dashboard] Criar gráfico de eficiência energética
-# ============================
-eficiencia = df['perfil_energetico'].value_counts().reset_index()
+perfil.columns = [
 
-eficiencia.columns = ['Perfil','Quantidade']
+    "Categoria",
+
+    "Quantidade"
+
+]
+
+
 
 fig = px.pie(
-    eficiencia,
 
-    names="Perfil",
+    perfil,
+
+    names="Categoria",
 
     values="Quantidade",
 
     hole=0.55,
 
-    color_discrete_sequence=PALETA_ENERSMART,
+    color="Categoria",
 
-    title="<b>Distribuição dos Perfis Energéticos</b>"
+    color_discrete_map={
+
+        "Eficiente": "#00A878",
+
+        "Moderado": "#76D7C4",
+
+        "Ineficiente": "#003B32"
+
+    },
+
+    title="<b>Classificação Energética IA</b>"
+
 )
 
 
 fig.update_traces(
-    textinfo="percent+label"
+
+    textinfo="percent+label",
+
+    hovertemplate=
+
+    "<b>%{label}</b><br>"
+    "Clientes: %{value}<br>"
+    "Percentual: %{percent}"
+
 )
 
 
 fig.update_layout(
-    height=450
+    showlegend=True,
+    legend=dict(
+        orientation="h",
+        yanchor="bottom",
+        y=-0.25,
+        xanchor="center",
+        x=0.5
+    )
 )
 
+
 for trace in fig.data:
+
+    trace.showlegend = True
+
+    dashboard.add_trace(
+
+        trace,
+
+        row=2,
+
+        col=1
+
+    )
+
+fig.update_layout(
+    legend=dict(
+        orientation="v",
+        x=1.02,
+        y=0.5
+    )
+)
+
+# ============================================================
+# 10. Consumo Médio Previsto por Categoria
+# ============================================================
+
+
+consumo_categoria = (
+
+    df.groupby("categoria")
+
+    ["consumo_estimado_kwh"]
+
+    .mean()
+
+    .reset_index()
+
+)
+
+
+
+fig = px.bar(
+
+    consumo_categoria,
+
+
+    x="categoria",
+
+
+    y="consumo_estimado_kwh",
+
+
+    color="categoria",
+
+
+    color_discrete_sequence=PALETA_ENERSMART,
+
+
+    text_auto=".0f",
+
+
+    title="<b>Consumo Médio Previsto</b>"
+
+)
+
+
+fig.update_traces(
+
+    textposition="outside",
+
+    width=0.35
+
+)
+
+
+fig.update_layout(
+
+    bargap=0.6,
+
+    showlegend=True,
+
+    legend_title_text="Categoria"
+
+)
+
+fig.data[0].showlegend = False
+
+for trace in fig.data:
+
+    trace.showlegend = False
 
     dashboard.add_trace(
         trace,
@@ -409,24 +646,51 @@ for trace in fig.data:
         col=2
     )
 
+
+
+# ============================================================
+# 11. Impacto Financeiro Estimado
+# ============================================================
+
+
+custo_categoria = (
+
+    df.groupby("categoria")
+
+    ["custo_estimado_mensal"]
+
+    .sum()
+
+    .reset_index()
+
+)
+
+
+
 fig = px.bar(
-    eficiencia,
 
-    y="Perfil",
+    custo_categoria,
 
-    x="Quantidade",
 
-    orientation="h",
+    x="categoria",
 
-    color="Perfil",
+
+    y="custo_estimado_mensal",
+
+
+    color="categoria",
+
 
     color_discrete_sequence=PALETA_ENERSMART,
 
-    text_auto=True,
 
-    title="<b>Quantidade de Clientes por Perfil Energético</b>"
+    text_auto=".0f",
+
+
+    title="<b>Custo Energético Estimado</b>"
 
 )
+
 
 
 fig.update_traces(
@@ -436,17 +700,6 @@ fig.update_traces(
 )
 
 
-fig.update_layout(
-
-    height=450,
-
-    showlegend=False,
-
-    xaxis_title="Quantidade de Clientes",
-
-    yaxis_title="Perfil"
-
-)
 
 dashboard.add_trace(
 
@@ -459,66 +712,147 @@ dashboard.add_trace(
 )
 
 
-# ============================
-# 5 - [Dashboard] Criar gráfico de pico de consumo
-# ============================
+
+
+
+# ============================================================
+# 12. Explicabilidade do Modelo
+# ============================================================
+
 
 fig = px.scatter(
+
     df,
 
-    x="uso_horario_pico_horas",
+    x="probabilidade",
 
-    y="consumo_kwh",
+    y="consumo_estimado_kwh",
 
-    color="perfil_energetico",
+    color="categoria",
 
-    size="quantidade_equipamentos",
+    size="consumo_estimado_kwh",
+
+    size_max=25,
+
 
     hover_data=[
-        "tipo_cliente"
+
+        "id_cliente",
+
+        "custo_estimado_mensal"
+
     ],
 
-    color_discrete_sequence=PALETA_ENERSMART,
 
-    title="<b>Padrão de Consumo x Horário de Pico</b>"
+    title="<b>Confiança IA x Consumo Previsto</b>"
+
 )
-
 
 fig.update_layout(
-    height=500
+    showlegend=True,
+    legend_title_text="Perfil IA",
+    legend=dict(
+        orientation="h",
+        yanchor="bottom",
+        y=-0.25,
+        xanchor="center",
+        x=0.5
+    )
 )
+
 
 for trace in fig.data:
 
+    trace.showlegend = True
+
     dashboard.add_trace(
+
         trace,
+
         row=3,
+
         col=2
+
     )
 
 
 
-pico = df.groupby("tipo_cliente")["uso_horario_pico_horas"].mean().reset_index()
+
+# ============================================================
+# 13. Ranking dos Maiores Consumidores
+# ============================================================
+
+
+top_clientes = (
+
+    df.sort_values(
+
+        "consumo_estimado_kwh",
+
+        ascending=False
+
+    )
+
+    .head(10)
+
+)
+
+
 
 fig = px.bar(
 
-    pico,
+    top_clientes,
 
-    y="tipo_cliente",
+    x="id_cliente",
 
-    x="uso_horario_pico_horas",
+    y="consumo_estimado_kwh",
 
-    orientation="h",
+    color="categoria",
 
-    color="tipo_cliente",
 
-    color_discrete_sequence=PALETA_ENERSMART,
+    color_discrete_map={
 
-    text_auto=".1f",
+        "Eficiente": "#00A878",
 
-    title="<b>Horas Médias de Uso no Horário de Pico</b>"
+        "Moderado": "#76D7C4",
+
+        "Ineficiente": "#003B32"
+
+    },
+
+
+    text="consumo_estimado_kwh",
+
+
+    title="<b>Top 10 Consumidores</b>"
 
 )
+
+
+fig.update_traces(
+
+    texttemplate="%{text:.0f} kWh",
+
+    textposition="outside",
+
+    width=0.9
+
+)
+
+
+fig.update_layout(
+    showlegend=True,
+    legend_title_text="Categoria IA",
+    bargap=0.15,
+    legend=dict(
+        orientation="h",
+        yanchor="bottom",
+        y=-0.25,
+        xanchor="center",
+        x=0.5
+    )
+)
+
 
 
 fig.update_traces(
@@ -528,47 +862,85 @@ fig.update_traces(
 )
 
 
-fig.update_layout(
-
-    height=450,
-
-    showlegend=False,
-
-    xaxis_title="Horas",
-
-    yaxis_title="Tipo de Cliente"
-
-)
 
 for trace in fig.data:
 
+    trace.showlegend = True
+
     dashboard.add_trace(
+
         trace,
+
         row=4,
+
         col=1
+
     )
+
+
+
+
+# ============================================================
+# 14. Tabela de Recomendações IA
+# ============================================================
+
+
+tabela = go.Table(
+
+
+    header=dict(
+
+        values=[
+
+            "<b>Cliente</b>",
+
+            "<b>Categoria</b>",
+
+            "<b>Recomendação IA</b>"
+
+        ],
+
+
+        fill_color=CORES["verde_principal"],
+
+
+        font=dict(
+
+            color="white"
+
+        )
+
+    ),
+
+
+
+    cells=dict(
+
+        values=[
+
+
+            df.head(10)["id_cliente"],
+
+
+            df.head(10)["categoria"],
+
+
+            df.head(10)["recomendacoes"]
+
+        ],
+
+
+        fill_color=CORES["cinza"]
+
+    )
+
+)
+
+
 
 dashboard.add_trace(
 
-    go.Indicator(
-
-        mode="number",
-
-        value=round(percentual_eficientes,1),
-
-        number={
-            "suffix": "%",
-            "font": {
-                "size": 45,
-                "color": CORES["verde_principal"]
-            }
-        },
-
-        title={
-            "text": "<b>Clientes Eficientes</b>"
-        }
-
-    ),
+    tabela,
 
     row=4,
 
@@ -576,36 +948,62 @@ dashboard.add_trace(
 
 )
 
+
+
+
+
+# ============================================================
+# 15. Layout Final
+# ============================================================
+
+
 dashboard.update_layout(
 
-    height=1800,
+    showlegend=False,
+
+    height=1900,
 
     width=1400,
 
-    title_text="<b>⚡ Lu | Men Dashboard - Eficiência Energética</b>",
-
     template="Lu | Men Dashboard",
 
-    showlegend=False
+    title=dict(
+
+        text=(
+            "<b>⚡ EnerSmart AI Dashboard</b><br>"
+            "<sup>Inteligência Artificial aplicada "
+            "à eficiência energética</sup>"
+        ),
+
+        x=0.05,
+
+        y=0.98
+
+    ),
+
+
+    margin=dict(
+
+        t=130,
+
+        b=50,
+
+        l=50,
+
+        r=50
+
+    )
 
 )
 
 
-dashboard.show()
+# ============================================================
+# 16. Executar Dashboard
+# ============================================================
 
-# ============================
-# Esses gráficos contam uma história clara dos dados:
-# | Ordem                        | Gráfico                             | Objetivo                                               |
-# | ---------------------------- | ----------------------------------- | ------------------------------------------------------ |
-# | 📊 KPI                       | Total de Clientes                   | Volume analisado                                       |
-# | 📊 KPI                       | Consumo Médio (kWh)                 | Indicador principal                                    |
-# | 📊 KPI                       | % Clientes Eficientes               | Eficiência geral                                       |
-# | 📈 Barras                    | Consumo por Tipo de Cliente         | Comparar perfis de consumidores                        |
-# | 🥧 Pizza                     | Distribuição do Perfil Energético   | Mostrar a classificação da IA                          |
-# | 📈 Barras                    | Consumo Médio por Perfil Energético | Relacionar consumo e eficiência                        |
-# | 🔵 Dispersão                 | Horário de Pico × Consumo           | Identificar padrões de uso                             |
-# | 📦 Box Plot                  | Consumo por Perfil Energético       | Visualizar dispersão e outliers                        |
-# | 🔥 Heatmap                   | Correlação entre variáveis          | Apoiar a análise exploratória (EDA)                    |
-# | 🌳 Importância das Variáveis | Random Forest                       | Mostrar quais fatores mais influenciam a classificação |
-# ============================
-# %%
+
+if __name__ == "__main__":
+
+    print("\n🚀 Abrindo Dashboard EnerSmart...")
+
+    dashboard.show()

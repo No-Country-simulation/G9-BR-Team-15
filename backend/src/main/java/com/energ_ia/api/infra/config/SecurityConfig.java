@@ -31,10 +31,17 @@ public class SecurityConfig {
                     req.requestMatchers(HttpMethod.POST, "/auth/login").permitAll();
                     req.requestMatchers(HttpMethod.POST, "/auth/register").permitAll();
                     req.requestMatchers(HttpMethod.GET, "/equipamentos").permitAll();
-                    req.requestMatchers(HttpMethod.POST, "/equipamentos").permitAll();
+                    req.requestMatchers(HttpMethod.GET, "/equipamentos/**").permitAll();
+                    req.requestMatchers(HttpMethod.GET, "/rankings/top10").permitAll();
+                    req.requestMatchers(HttpMethod.POST, "/rankings/calcular").permitAll();
                     req.requestMatchers(
                             "/teste/analise-energetica",
                             "/error").permitAll();
+                    req.requestMatchers(
+                            "/v3/api-docs/**",
+                            "/swagger-ui/**",
+                            "/swagger-ui.html"
+                    ).permitAll();
                     req.anyRequest().authenticated();
                 })
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)

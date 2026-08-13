@@ -15,6 +15,7 @@ public class ClienteMapper {
 
         var equipamentosDTO = cliente.getEquipamentos().stream()
                 .map(eq -> new ClienteEquipamentoResponseDTO(
+                        eq.getId(), 
                         eq.getEquipamentoCatalogo().getId(),
                         eq.getEquipamentoCatalogo().getTipo(),
                         eq.getEquipamentoCatalogo().getMarca(),

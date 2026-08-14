@@ -91,10 +91,11 @@ docker compose down
 
  **Exemplos válidos: "http://ml-service:8000/api/v1/teste/analise-energetica" e "http://ml-service:8000/api/v1/analise-energetica". O serviço também aceita os aliases curtos "/teste-analise-energetica" e "/analise-energetica".**
 
- **Após subir os containers com Docker, toda as rotas disponiveis podem ser verificadas e testadas em: http://localhost:8080/swagger-ui.html**
+<br>
 
  ## Rotas da API
 
+**Abaixo estão listados os principais endpoints com exemplos de uso. Outras rotas disponíveis podem ser verificadas após a execução local dos containers em: http://localhost:8080/swagger-ui.html**.
 
 ### 1. Teste da plataforma com requisitos obrigatórios do hackthon
 <br>
@@ -131,7 +132,7 @@ docker compose down
    
 ```
 
-### 2. Rota para analise energetica de um cliente de um usuário logado
+### 2. Rota para analise energetica de um cliente pertencente a um usuário logado
 <br>
 
 **Endpoint:** "POST/{clienteId}/analise-energetica"
@@ -455,3 +456,138 @@ Requisição sem corpo (No Body)
 ]
 
 ```
+### 7. Cadastrar consumo mensal
+
+**Endpoint:** "POST/clientes/{clienteId}/consumos"
+
+**Ex:** http://localhost:8080/clientes/3/consumos
+
+
+**Request:**
+
+```json
+{
+	"mesReferencia": "2026-09-17",
+	"consumoRegistradoKwh": 100
+}
+
+```
+**Response:**
+```json
+{
+	"id": 3,
+	"clienteId": 3,
+	"mesReferencia": "2026-09-01",
+	"consumoRegistradoKwh": 100.0,
+	"consumoPrevistoKwh": null,
+	"consumoEstimadoIaKwh": null
+}
+
+```
+
+**Para se manter a normalização dos dados do banco e apenas 1 registro de consumo mensal para cada cliente ser guardado, por padrão, a data salva é o 1 dia do mês de referência.**
+
+### 8. Atualização do consumo mensal
+
+**Endpoint:** "PUT/clientes/{clienteId}/consumos/{consumoId}"
+
+**Ex:** http://localhost:8080/clientes/3/consumos/6
+
+
+**Request:**
+
+```json
+{
+	"mesReferencia": "2026-08-01",
+	"consumoRegistradoKwh": 100
+}
+
+```
+**Response:**
+```json
+{
+	"id": 6,
+	"clienteId": 3,
+	"mesReferencia": "2026-08-01",
+	"consumoRegistradoKwh": 100.0,
+	"consumoPrevistoKwh": 1300.5,
+	"consumoEstimadoIaKwh": 1300.5
+}
+
+```
+
+### 8. Listar dados de consumo de um cliente
+
+**Endpoint:** "GET/clientes/{clienteId}/consumos/"
+
+**Ex:** http://localhost:8080/clientes/3/consumos
+
+
+**Request:**
+
+```json
+Requisição sem corpo (No Body)
+```
+**Response:**
+```json
+[
+	{
+		"id": 5,
+		"clienteId": 3,
+		"mesReferencia": "2026-07-01",
+		"consumoRegistradoKwh": 100.0,
+		"consumoPrevistoKwh": null,
+		"consumoEstimadoIaKwh": null
+	},
+	{
+		"id": 6,
+		"clienteId": 3,
+		"mesReferencia": "2026-08-01",
+		"consumoRegistradoKwh": 100.0,
+		"consumoPrevistoKwh": 1300.5,
+		"consumoEstimadoIaKwh": 1300.5
+	}
+]
+
+```
+
+### 9. Ranking Top 10
+
+**Endpoint:** "GET/ranking/top10?tipo={tipoRanking}"
+
+**Ex:** http://localhost:8080/rankings/top10?tipo=PAIS
+
+
+**Request:**
+
+```json
+Requisição sem corpo (No Body)
+```
+**Response:**
+```json
+[
+	{
+		"posicao": 1,
+		"nomeRazaoSocial": "julia",
+		"localidade": "Brasil",
+		"tipoImovel": "RESIDENCIAL",
+		"pontuacao": 43,
+		"categoriaEficiencia": "INEFICIENTE",
+		"atualizadoEm": "2026-08-12T15:36:34.985551"
+	},
+	{
+		"posicao": 2,
+		"nomeRazaoSocial": "Mariana",
+		"localidade": "Brasil",
+		"tipoImovel": "RESIDENCIAL",
+		"pontuacao": 42,
+		"categoriaEficiencia": "INEFICIENTE",
+		"atualizadoEm": "2026-08-12T15:36:34.991789"
+	}
+]
+
+```
+
+## Desenvolvedores e contribuintes
+| [<img loading="lazy" src="https://avatars.githubusercontent.com/u/59670350?v=4" width=115><br><sub>Monique Evellin R.Gomes</sub>](https://github.com/niqueve/) | [<img loading="lazy" src="https://avatars.githubusercontent.com/u/177073749?v=4" width=115><br><sub>Luanda Lima</sub>](https://github.com/LuandaLl) |[<img loading="lazy" src="https://avatars.githubusercontent.com/u/184301627?v=4" width=115><br><sub>Camila Monteiro</sub>](https://github.com/CamilaMonteiroRondon) | [<img loading="lazy" src="https://avatars.githubusercontent.com/u/223376015?v=4" width=115><br><sub>Kelly Costa</sub>](https://github.com/kellycosta-tech) | [<img loading="lazy" src="https://avatars.githubusercontent.com/u/179046239?v=4" width=115><br><sub>Débora Guerra</sub>](https://github.com/deboracguerra) | [<img loading="lazy" src="https://avatars.githubusercontent.com/u/146669020?v=4" width=115><br><sub>Thalysson Martins</sub>](https://github.com/4909thalysson) 
+

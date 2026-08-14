@@ -1,0 +1,1 @@
+ALTER TABLE Consumo_Mensal ADD COLUMN consumo_estimado_ia_kwh DOUBLE;

@@ -18,9 +18,9 @@ yarn-error.log*
 # ========================
 # Back-End (Java / Spring Boot)
 # ========================
-backend-api/target/
-backend-api/bin/
-backend-api/.mvn/
+backend/target/
+backend/bin/
+backend/.mvn/
 *.class
 *.jar
 *.war
@@ -59,3 +59,17 @@ mysql_data/
 # Arquivos temporários do Sistema Operacional
 .DS_Store
 Thumbs.db
+
+# Pastas de build do Maven
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+
+*.lst

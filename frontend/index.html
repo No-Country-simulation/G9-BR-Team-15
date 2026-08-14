@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>LUMEN</title>
+
+    <link rel="stylesheet" href="/CSS/styles.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;800&display=swap" rel="stylesheet">
+
+    <link rel="icon" href="/Assests/logo-lumen-branco.png" type="image/png">
+
+</head>
+
+<body>
+
+    <header class="navbar">
+
+        <div class="navbar__logo">
+            <img src="/Assests/Logo-Lumen-Verde.png" alt="Logo Lumen" class="navbar__logo-image" width="50" height="50">
+            LU|MEN
+        </div>
+
+        <nav>
+
+            <ul class="navbar__links">
+
+                <li><a href="#projeto">Projeto</a></li>
+                <li><a href="/Pages/blog.html">Blog</a></li>
+                <li><a href="/Pages/equipe.html">Equipe</a></li>
+
+            </ul>
+
+        </nav>
+
+    </header>
+
+<section class="hero" id="hero" data-estado="simulador">
+
+    <div class="hero__bg hero__bg--simulador"></div>
+    <div class="hero__bg hero__bg--plataforma"></div>
+
+    <div class="hero__estado hero__estado--simulador">
+
+        <div class="hero__content">
+
+            <h1>
+                Gastando muito com a fatura de energia ?
+            </h1>
+
+            <p>
+                Descubra agora o que pode estar causando isso.
+            </p>
+
+            <div class="hero__buttons">
+
+                <button class="btn-primary" data-abrir-modal="modalSimulador">
+                    Acesse o simulador
+                </button>
+
+                <button class="btn-circle" id="irParaPlataforma" aria-label="Ir para a plataforma">
+                    →
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="hero__estado hero__estado--plataforma">
+
+        <div class="hero__content">
+
+            <h1>
+                Sua energia, sob controle !
+            </h1>
+
+            <p>
+                Cadastre sua residência ou estabelecimento e acompanhe
+                de forma contínua seu perfil de consumo, com histórico,
+                metas e recomendações personalizadas.
+            </p>
+
+            <div class="hero__buttons">
+
+                <button class="btn-circle btn-circle--voltar" id="voltarParaSimulador" aria-label="Voltar ao simulador">
+                    ←
+                </button>
+                
+                <button class="btn-primary btn-primary--azul" data-abrir-modal="modalLogin">
+                    Entrar na plataforma
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="modal" id="modalSimulador">
+
+    <div class="modal__content">
+
+        <span class="modal__close" data-fechar-modal="modalSimulador">&times;</span>
+
+        <h2>Simulador de eficiência energética</h2>
+
+        <p>
+            Descubra rapidamente como está seu perfil de consumo.
+        </p>
+
+        <div class="form-group">
+
+            <label for="tipo-imovel">Tipo de imóvel</label>
+
+            <select id="tipo-imovel">
+
+                <option>Selecione</option>
+                <option>Residencial</option>
+                <option>Comercial Micro</option>
+                <option>Comercial Pequeno</option>
+                <option>Comercial Médio</option>
+                <option>Comercial Grande</option>
+                <option>Industrial Leve</option>
+                <option>Industrial Pesado</option>
+                <option>Rural</option>
+                <option>Serviço Público</option>
+
+            </select>
+
+        </div>
+
+        <div class="form-group">
+
+            <label for="consumo">Consumo Mensal (kWh)</label>
+
+            <input type="number" id="consumo" placeholder="300 kWh">
+
+        </div>
+
+        <div class="form-group">
+
+            <label>
+                Equipamentos:
+                <span id="equipamentos-valor">5</span>
+            </label>
+
+            <input type="range" id="equipamentos" min="0" max="100" value="5">
+
+        </div>
+
+        <div class="form-group">
+
+            <label for="horas-uso">Horas de uso</label>
+
+            <input type="text" id="horas-uso" placeholder="Ex: 5 horas/dia">
+
+        </div>
+
+        <button class="btn-continuar">
+            Continuar
+        </button>
+
+    </div>
+
+</div>
+
+<div class="modal" id="modalCadastro">
+
+    <div class="modal__content">
+
+        <span class="modal__close" data-fechar-modal="modalCadastro">&times;</span>
+
+        <h2>Criar conta na LU|MEN</h2>
+
+        <p>
+            Leva menos de um minuto. Depois disso, seu painel de
+            consumo já começa a ser construído.
+        </p>
+
+        <div class="form-group">
+            <label for="nome">Nome completo</label>
+            <input type="text" id="nome" placeholder="Seu nome">
+        </div>
+
+        <div class="form-group">
+            <label for="email-cadastro">E-mail</label>
+            <input type="email" id="email-cadastro" placeholder="voce@email.com">
+        </div>
+
+        <div class="form-group">
+            <label for="senha-cadastro">Senha</label>
+            <input type="password" id="senha-cadastro" placeholder="Mínimo 8 caracteres">
+        </div>
+
+        <div class="form-group">
+            <label for="tipo-imovel-cadastro">Tipo de imóvel</label>
+
+            <select id="tipo-imovel-cadastro">
+                <option>Selecione</option>
+                <option>Residencial</option>
+                <option>Comercial Micro</option>
+                <option>Comercial Pequeno</option>
+                <option>Comercial Médio</option>
+                <option>Comercial Grande</option>
+                <option>Industrial Leve</option>
+                <option>Industrial Pesado</option>
+                <option>Rural</option>
+                <option>Serviço Público</option>
+            </select>
+        </div>
+
+        <button class="btn-continuar btn-continuar--azul">
+            Criar conta
+        </button>
+
+    </div>
+
+</div>
+
+<div class="modal" id="modalLogin">
+
+    <div class="modal__content modal__content--sm">
+
+        <span class="modal__close" data-fechar-modal="modalLogin">&times;</span>
+
+        <h2>Entrar</h2>
+
+        <div class="form-group">
+            <label for="email-login">E-mail</label>
+            <input type="email" id="email-login" placeholder="voce@email.com">
+        </div>
+
+        <div class="form-group">
+            <label for="senha-login">Senha</label>
+            <input type="password" id="senha-login" placeholder="Sua senha">
+        </div>
+
+        <button class="btn-continuar btn-continuar--azul">
+            Entrar
+        </button>
+
+    </div>
+
+</div>
+
+<div class="modal" id="modalResultado">
+
+    <div class="modal__content modal__content--resultado">
+
+        <span class="modal__close" data-fechar-modal="modalResultado">&times;</span>
+
+        <div class="resultado__card" id="resultadoCard">
+
+            <div class="resultado__topo">
+                <div class="resultado__marca">
+                    <img src="/Assests/logo-lumen-branco.png" alt="Logo Lumen" class="resultado__marca-logo">
+                    LU|MEN
+                </div>
+                <span class="resultado__titulo-topo">Diagnóstico Energético</span>
+            </div>
+
+            <div class="resultado__badge">
+                <span id="resultadoEmoji"></span>
+                Classificação: <strong id="resultadoNivel"></strong>
+            </div>
+
+            <p class="resultado__label-custo">Custo estimado mensal</p>
+            <p class="resultado__valor-custo" id="resultadoCusto"></p>
+
+            <div class="resultado__colunas">
+
+                <div class="resultado__coluna">
+                    <p class="resultado__subtitulo">O que esse resultado significa?</p>
+                    <p class="resultado__explicacao" id="resultadoExplicacao"></p>
+                </div>
+
+                <div class="resultado__coluna">
+                    <p class="resultado__subtitulo">Recomendações personalizadas</p>
+                    <ul id="resultadoRecomendacoes" class="resultado__lista"></ul>
+                </div>
+
+            </div>
+
+            <div class="resultado__impacto" id="resultadoImpacto"></div>
+
+        </div>
+
+        <div class="resultado__acoes">
+            <button type="button" class="btn-secundario" id="baixarImagem">Baixar imagem</button>
+            <button type="button" class="btn-secundario" id="baixarPdf">Baixar PDF</button>
+            <button type="button" class="btn-continuar btn-continuar--azul" data-abrir-modal="modalCadastro">
+                Quero acompanhar meu consumo
+            </button>
+        </div>
+
+    </div>
+
+</div>
+
+    <script>
+        const hero = document.getElementById('hero');
+
+        document.getElementById('irParaPlataforma').addEventListener('click', () => {
+            hero.dataset.estado = 'plataforma';
+        });
+
+        document.getElementById('voltarParaSimulador').addEventListener('click', () => {
+            hero.dataset.estado = 'simulador';
+        });
+    </script>
+
+</section>
+
+<div class="onda-divisor">
+    <svg viewBox="0 0 1440 100" preserveAspectRatio="none">
+        <path d="M0,40 C360,100 1080,0 1440,60 L1440,100 L0,100 Z" fill="#ffffff"/>
+    </svg>
+</div>
+
+    <section id="projeto" class="sobre">
+
+        <div class="sobre__logo">
+            LU|MEN
+        </div>
+
+        <p class="sobre__subtitulo">
+            Transformando dados em decisões inteligentes para um futuro mais sustentável.
+        </p>
+
+        <div class="sobre__grid">
+
+            <article class="card is-active" data-card="1">
+                <div class="card__fundo-identidade"></div>
+                <img src="/Assests/logo-lumen-branco.png" alt="Símbolo Lumen" class="card__logo-identidade">
+                <button class="card__toggle" aria-label="Alternar card">+</button>
+
+                <div class="card__conteudo">
+                    <span class="card__label-horizontal">Conheça a identidade</span>
+                    <div class="card__texto">
+                        <p class="card__titulo">Conheça a identidade</p>
+                        <p class="card__descricao">
+                            LUMEN é a unidade científica do fluxo luminoso — mas aqui ganha
+                            um novo significado: LU (luz/energia) + MEN (mente/inteligência
+                            artificial).
+                        </p>
+                    </div>
+                </div>
+            </article>
+
+            <article class="card" data-card="2">
+                <div class="card__imagem" style="background-image:url('/Assests/Component-1.png');"></div>
+                <div class="card__gradiente"></div>
+
+                <button class="card__toggle" aria-label="Alternar card">+</button>
+
+                <div class="card__conteudo">
+                    <span class="card__label-vertical">Conheça o projeto</span>
+                    <div class="card__texto">
+                        <p class="card__titulo">Conheça o projeto</p>
+                        <p class="card__descricao">
+                            O LUMEN nasceu para transformar dados de consumo energético em
+                            decisões mais inteligentes, aproximando tecnologia,
+                            sustentabilidade e economia.
+                        </p>
+                    </div>
+                </div>
+            </article>
+
+            <article class="card" data-card="3">
+                <div class="card__imagem" style="background-image:url('/Assests/Component-2.png');"></div>
+                <div class="card__gradiente"></div>
+
+                <button class="card__toggle" aria-label="Alternar card">+</button>
+
+                <div class="card__conteudo">
+                    <span class="card__label-vertical">Entenda a solução</span>
+                    <div class="card__texto">
+                        <p class="card__titulo">Entenda a solução</p>
+                        <p class="card__descricao">
+                            Analise hábitos de consumo, identifique desperdícios
+                            e receba recomendações personalizadas para reduzir
+                            seus gastos com energia.
+                        </p>
+                    </div>
+                </div>
+            </article>
+
+            <article class="card" data-card="4">
+                <div class="card__imagem" style="background-image:url('/Assests/Component-3.png');"></div>
+                <div class="card__gradiente"></div>
+
+                <button class="card__toggle" aria-label="Alternar card">+</button>
+
+                <div class="card__conteudo">
+                    <span class="card__label-vertical">Saiba mais</span>
+                    <div class="card__texto">
+                        <p class="card__titulo">Saiba mais</p>
+                        <p class="card__descricao">
+                            Acompanhe indicadores de eficiência,
+                            compare sua evolução ao longo do tempo
+                            e descubra novas oportunidades de economia.
+                        </p>
+                    </div>
+                </div>
+            </article>
+
+        </div>
+
+    </section>
+
+    <div class="onda-panorama">
+        <svg viewBox="0 0 1440 100" preserveAspectRatio="none">
+            <path d="M0,40 C360,100 1080,0 1440,60 L1440,100 L0,100 Z" fill="#0e4c3c"/>
+        </svg>
+    </div>
+
+    <section class="dashboardPanorama">
+
+        <h1>Panorama do sistema elétrico nacional</h1>
+        <p>Conheça as partículas do sistema elétrico do Brasil</p>
+
+        <div class="bandeiraTarifaria cardFlip" tabindex="0">
+            <div class="cardFlip__inner">
+                <div class="cardFlip__face cardFlip__face--frente">
+                    <img src="/Assests/bandeira-tarifaria.jpg" alt="Bandeira tarifária" class="bandeiraTarifaria__imagem">
+                    <h2>Bandeira Tarifária de Agosto</h2>
+                </div>
+                <div class="cardFlip__face cardFlip__face--verso bandeiraTarifaria__verso" data-bandeira="amarela">
+                    <p class="bandeiraTarifaria__label">Bandeira</p>
+                    <p class="bandeiraTarifaria__nome">Amarela</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="quantidadeHidreletricas cardFlip" tabindex="0">
+            <div class="cardFlip__inner">
+                <div class="cardFlip__face cardFlip__face--frente">
+                    <img src="/Assests/hidreletrica.jpg" alt="Hidrelétrica" class="quantidadeHidreletricas__imagem">
+                    <h2>Quantidade de hidrelétricas</h2>
+                </div>
+                <div class="cardFlip__face cardFlip__face--verso">
+                    <span class="cardFlip__numero">1.400</span>
+                    <p class="cardFlip__legenda">usinas hidrelétricas em operação no Brasil</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="quantidadeTermeltricas cardFlip" tabindex="0">
+            <div class="cardFlip__inner">
+                <div class="cardFlip__face cardFlip__face--frente">
+                    <img src="/Assests/termeltrica.jpg" alt="Termelétrica" class="quantidadeTermeltricas__imagem">
+                    <h2>Quantidade de termelétricas</h2>
+                </div>
+                <div class="cardFlip__face cardFlip__face--verso">
+                    <span class="cardFlip__numero">3.400</span>
+                    <p class="cardFlip__legenda">usinas termelétricas em operação no Brasil</p>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- Modais: abrir, fechar (X, clique fora) -->
+    <script>
+
+        document.querySelectorAll('[data-abrir-modal]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+
+                // fecha qualquer modal que já esteja aberto
+                document.querySelectorAll('.modal.ativo').forEach((modalAberto) => {
+                    modalAberto.classList.remove('ativo');
+                });
+
+                document.getElementById(btn.dataset.abrirModal).classList.add('ativo');
+
+            });
+        });
+
+        document.querySelectorAll('[data-fechar-modal]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                document.getElementById(btn.dataset.fecharModal).classList.remove('ativo');
+            });
+        });
+
+        document.querySelectorAll('.modal').forEach((modal) => {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.remove('ativo');
+                }
+            });
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                document.querySelectorAll('.modal.ativo').forEach((modal) => {
+                    modal.classList.remove('ativo');
+                });
+            }
+        });
+
+    </script>
+
+    <!-- Slider de equipamentos (simulador) -->
+    <script>
+
+        const slider = document.getElementById('equipamentos');
+        const valor = document.getElementById('equipamentos-valor');
+
+        slider.addEventListener('input', () => {
+            valor.textContent = slider.value;
+        });
+
+    </script>
+
+    <!-- Cards "sobre" -->
+    <script>
+
+        const cards = document.querySelectorAll('.card');
+
+        cards.forEach((card) => {
+            card.addEventListener('click', () => {
+                cards.forEach((c) => c.classList.remove('is-active'));
+                card.classList.add('is-active');
+            });
+        });
+
+    </script>
+
+    <!-- Panorama: giro automático dos cards flip -->
+    <script>
+
+        const INTERVALO_GIRO_MS = 4000;
+
+        const preferenciaMovimentoReduzido = window.matchMedia(
+            '(prefers-reduced-motion: reduce)'
+        ).matches;
+
+        document.querySelectorAll('.dashboardPanorama .cardFlip').forEach((card) => {
+
+            let intervalo = null;
+
+            const iniciarGiroAutomatico = () => {
+                if (preferenciaMovimentoReduzido) return;
+                if (intervalo) return;
+
+                intervalo = setInterval(() => {
+                    card.classList.toggle('is-active');
+                }, INTERVALO_GIRO_MS);
+            };
+
+            const pausarGiroAutomatico = () => {
+                clearInterval(intervalo);
+                intervalo = null;
+            };
+
+            iniciarGiroAutomatico();
+
+            card.addEventListener('mouseenter', pausarGiroAutomatico);
+            card.addEventListener('focusin', pausarGiroAutomatico);
+
+            card.addEventListener('mouseleave', iniciarGiroAutomatico);
+            card.addEventListener('focusout', iniciarGiroAutomatico);
+
+        });
+
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <script src="/Scripts/script.js"></script>
+
+</body>
+
+</html>

@@ -47,8 +47,10 @@ MENSAGEM_POR_PERFIL = {
 }
 
 
-def carregar_catalogo(pasta="."):
-    df_catalogo = pd.read_csv(os.path.join(pasta, "data-science/tabela_equipamento_catalogo.csv"))
+def carregar_catalogo(pasta=None):
+    if pasta is None:
+        pasta = os.path.dirname(os.path.abspath(__file__))
+    df_catalogo = pd.read_csv(os.path.join(pasta, "tabela_equipamento_catalogo.csv"))
     df_catalogo["categoria"] = df_catalogo["tipo"].map(MAPA_CATEGORIA)
     return df_catalogo
 
@@ -103,6 +105,7 @@ def calcular_features_cliente(tipo_pessoa, tipo_imovel, equipamentos, df_catalog
     for categoria in TODAS_CATEGORIAS:
         linha[f"qtd_{categoria.lower()}"] = qtd_por_categoria.get(categoria, 0)
 
+    # categoria que mais pesa em kWh (usada só pra gerar a recomendação, não é feature do modelo)
     consumo_por_categoria = df.groupby("categoria")["consumo_kwh"].sum()
     categoria_dominante = consumo_por_categoria.idxmax() if len(consumo_por_categoria) else None
 
@@ -135,11 +138,13 @@ def prever(tipo_pessoa, tipo_imovel, equipamentos, modelo, df_catalogo):
         "recomendacoes": gerar_recomendacoes(categoria_prevista, categoria_dominante),
         "consumo_estimado_kwh": round(consumo_total_kwh, 2),
         "custo_estimado_mensal": round(consumo_total_kwh * TARIFA_REFERENCIA_KWH, 2),
-        "alerta_consumo_alto": categoria_prevista == "Ineficiente",  
+        "alerta_consumo_alto": categoria_prevista == "Ineficiente",  # recurso opcional do edital
     }
 
 
 def simular_economia(consumo_atual_kwh, reducao_percentual):
+    """Recurso opcional do edital: simulação de cenário de economia.
+    Estima quanto o cliente economizaria (em kWh e em R$) se reduzisse o consumo em X%."""
     consumo_reduzido = consumo_atual_kwh * (1 - reducao_percentual / 100)
     economia_kwh = consumo_atual_kwh - consumo_reduzido
     return {
@@ -150,14 +155,19 @@ def simular_economia(consumo_atual_kwh, reducao_percentual):
     }
 
 
-def prever_em_lote(pasta="."):
-    df_cliente = pd.read_csv(os.path.join(pasta, "data-science/tabela_cliente.csv"))
-    df_equip = pd.read_csv(os.path.join(pasta, "data-science/tabela_cliente_equipamento.csv"))
+def prever_em_lote(pasta=None):
+    if pasta is None:
+        pasta = os.path.dirname(os.path.abspath(__file__))
+    """Recurso opcional do edital: processamento em lote via CSV.
+    Roda a previsão pra TODOS os clientes das 3 tabelas de uma vez (útil pro dashboard
+    e pra gerar um histórico de análises). Salva o resultado em previsoes.csv."""
+    df_cliente = pd.read_csv(os.path.join(pasta, "tabela_cliente.csv"))
+    df_equip = pd.read_csv(os.path.join(pasta, "tabela_cliente_equipamento.csv"))
     df_catalogo = carregar_catalogo(pasta)
-    modelo = joblib.load(os.path.join(pasta, "data-science/modelo_energia.pkl"))
+    modelo = joblib.load(os.path.join(pasta, "modelo_energia.pkl"))
 
-    df_equip = df_equip[df_equip["quantidade"] > 0].copy()  
-    if df_cliente["tipo_pessoa"].isnull().any(): 
+    df_equip = df_equip[df_equip["quantidade"] > 0].copy()  # mesma limpeza do treino
+    if df_cliente["tipo_pessoa"].isnull().any():  # 50 clientes vêm com tipo_pessoa vazio
         df_cliente["tipo_pessoa"] = df_cliente["tipo_pessoa"].fillna(df_cliente["tipo_pessoa"].mode()[0])
 
     resultados = []
@@ -181,9 +191,9 @@ def prever_em_lote(pasta="."):
 
 
 if __name__ == "__main__":
-    # 3 exemplos de utilização (requisito mínimo do edital) 
-    modelo = joblib.load("modelo_energia.pkl")
-    df_catalogo = carregar_catalogo(".")
+    # --- 3 exemplos de utilização (requisito mínimo do edital) ---
+    modelo = joblib.load("data-science/modelo_energia.pkl")
+    df_catalogo = carregar_catalogo()
 
     exemplo_1 = dict(
         tipo_pessoa="PF", tipo_imovel="Residencial",
@@ -217,10 +227,12 @@ if __name__ == "__main__":
         print(resultado)
         print()
 
+    # --- simulação de economia (recurso opcional) ---
     print("--- Simulação de economia (exemplo 3, reduzindo 20% do consumo) ---")
     consumo_ex3 = prever(exemplo_3["tipo_pessoa"], exemplo_3["tipo_imovel"], exemplo_3["equipamentos"], modelo, df_catalogo)["consumo_estimado_kwh"]
     print(simular_economia(consumo_ex3, reducao_percentual=20))
     print()
 
+    # --- processamento em lote (recurso opcional) ---
     print("--- Processamento em lote (todos os clientes das tabelas) ---")
-    prever_em_lote(".")
+    prever_em_lote()

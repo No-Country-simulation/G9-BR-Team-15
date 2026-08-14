@@ -1,0 +1,54 @@
+services:
+  mysql-db:
+    image: mysql:8.0
+    container_name: lumen_mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+    ports:
+      - "${DB_PORT:-3307}:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - energia_network
+
+  ml-service:
+    build:
+      context: .
+      dockerfile: ml-service/Dockerfile
+    container_name: lumen_ml
+    restart: always
+    ports:
+      - "8000:8000"
+    networks:
+      - energia_network
+
+  api-backend:
+    build:
+      context: ./backend
+    container_name: lumen_api
+    restart: always
+    ports:
+      - "${API_PORT:-8080}:8080"
+    env_file:
+      - .env
+    environment:
+      - ML_SERVICE_URL=http://ml-service:8000
+      - API_TOKEN_SECRET=${API_TOKEN_SECRET} 
+      - ML_API_ENDPOINT_OBRIGATORIO=http://ml-service:8000/api/v1/teste/analise-energetica
+      - ML_API_ENDPOINT_PRINCIPAL=http://ml-service:8000/api/v1/analise-energetica
+    depends_on:
+      - mysql-db
+      - ml-service
+    networks:
+      - energia_network
+
+volumes:
+  mysql_data:
+
+networks:
+  energia_network:
+    driver: bridge

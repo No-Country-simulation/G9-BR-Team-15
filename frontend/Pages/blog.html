@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/CSS/Blog.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;800&display=swap" rel="stylesheet">
+
+    <link rel="icon" href="/Assests/logo-lumen-branco.png" type="image/png">
+
+    <title>Blog</title>
+</head>
+
+<body>
+
+    <header class="navbar">
+        <div class="navbar__logo">
+            <a href="/" class="navbar__logo-link">
+                <img src="/Assests/logo-lumen-branco.png" class="navbar__logo-image" width="50" height="50">
+                LU|MEN
+            </a>
+        </div>
+
+        <ul class="navbar__links">
+            <li><a href="/">Inicio</a></li>
+            <li><a href="/Pages/blog.html">Blog</a></li>
+            <li><a href="/Pages/equipe.html">Equipe</a></li>
+        </ul>
+    </header>
+
+    <section class="blog__intro">
+        <h1 class="blog__intro-titulo">Blog LU|MEN</h1>
+        <p class="blog__intro-texto">
+            Conteúdos em áudio sobre consumo de energia, tarifas e dicas
+            práticas para economizar na sua conta de luz.
+        </p>
+    </section>
+
+    <section class="blog__lista">
+
+        <article class="blog-item">
+            <div class="blog-item__capa" style="background-image:url('/Assests/bandeira-tarifaria.jpg');"></div>
+            <div class="blog-item__conteudo">
+                <p class="blog-item__titulo">Bandeiras tarifárias</p>
+                <p class="blog-item__resumo">
+                    Veja como funcionam as bandeiras verde, amarela e vermelha
+                    e o impacto direto na sua conta.
+                </p>
+
+                <div class="player">
+                    <button class="player__play" aria-label="Reproduzir">
+                        <svg class="icon-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                        <svg class="icon-pause" viewBox="0 0 24 24" style="display:none;"><path d="M6 5h4v14H6zm8 0h4v14h-4z"/></svg>
+                    </button>
+                    <div class="player__barra">
+                        <div class="player__progresso"></div>
+                    </div>
+                    <span class="player__tempo">1:49</span>
+                    <audio class="player__audio" preload="none">
+                        <source src="/Assests/audios/Como_funcionam_as_bandeiras_tarifarias_de_luz.m4a" type="audio/mp4">
+                    </audio>
+                </div>
+            </div>
+        </article>
+
+        <article class="blog-item">
+            <div class="blog-item__capa" style="background-image:url('/Assests/NoticiaEnergia.jpg');"></div>
+            <div class="blog-item__conteudo">
+                <p class="blog-item__titulo">Dicas para economizar energia</p>
+                <p class="blog-item__resumo">
+                    Pequenas mudanças de hábito que reduzem seus gastos
+                    sem abrir mão do conforto.
+                </p>
+
+                <div class="player">
+                    <button class="player__play" aria-label="Reproduzir">
+                        <svg class="icon-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                        <svg class="icon-pause" viewBox="0 0 24 24" style="display:none;"><path d="M6 5h4v14H6zm8 0h4v14h-4z"/></svg>
+                    </button>
+                    <div class="player__barra">
+                        <div class="player__progresso"></div>
+                    </div>
+                    <span class="player__tempo">1:41</span>
+                    <audio class="player__audio" preload="none">
+                        <source src="/Assests/audios/Como_baixar_sua_conta_de_luz_hoje.m4a" type="audio/mp4">
+                    </audio>
+                </div>
+            </div>
+        </article>
+
+    </section>
+
+    <script src="/Scripts/blog.js"></script>
+
+</body>
+</html>

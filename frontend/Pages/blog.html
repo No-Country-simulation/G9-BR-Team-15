@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/CSS/Blog.css">
+    <link rel="stylesheet" href="../CSS/Blog.css">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;800&display=swap" rel="stylesheet">
 
-    <link rel="icon" href="/Assests/logo-lumen-branco.png" type="image/png">
+    <link rel="icon" href="../Assests/logo-lumen-branco.png" type="image/png">
 
     <title>Blog</title>
 </head>
@@ -17,16 +17,16 @@
 
     <header class="navbar">
         <div class="navbar__logo">
-            <a href="/" class="navbar__logo-link">
-                <img src="/Assests/logo-lumen-branco.png" class="navbar__logo-image" width="50" height="50">
-                LU|MEN
+            <a href="../index.html" class="navbar__logo-link" aria-label="LU|MEN - início">
+                <img src="../Assests/logo-lumen-bulb-white.png" class="navbar__brand-icon" alt="">
+                <span>LU|MEN</span>
             </a>
         </div>
 
         <ul class="navbar__links">
-            <li><a href="/">Inicio</a></li>
-            <li><a href="/Pages/blog.html">Blog</a></li>
-            <li><a href="/Pages/equipe.html">Equipe</a></li>
+            <li><a href="../index.html">Inicio</a></li>
+            <li><a href="./blog.html">Blog</a></li>
+            <li><a href="./equipe.html">Equipe</a></li>
         </ul>
     </header>
 
@@ -41,7 +41,7 @@
     <section class="blog__lista">
 
         <article class="blog-item">
-            <div class="blog-item__capa" style="background-image:url('/Assests/bandeira-tarifaria.jpg');"></div>
+            <div class="blog-item__capa" style="background-image:url('../Assests/bandeira-tarifaria.jpg');"></div>
             <div class="blog-item__conteudo">
                 <p class="blog-item__titulo">Bandeiras tarifárias</p>
                 <p class="blog-item__resumo">
@@ -59,14 +59,14 @@
                     </div>
                     <span class="player__tempo">1:49</span>
                     <audio class="player__audio" preload="none">
-                        <source src="/Assests/audios/Como_funcionam_as_bandeiras_tarifarias_de_luz.m4a" type="audio/mp4">
+                        <source src="../Assests/audios/Como_funcionam_as_bandeiras_tarifarias_de_luz.m4a" type="audio/mp4">
                     </audio>
                 </div>
             </div>
         </article>
 
         <article class="blog-item">
-            <div class="blog-item__capa" style="background-image:url('/Assests/NoticiaEnergia.jpg');"></div>
+            <div class="blog-item__capa" style="background-image:url('../Assests/NoticiaEnergia.jpg');"></div>
             <div class="blog-item__conteudo">
                 <p class="blog-item__titulo">Dicas para economizar energia</p>
                 <p class="blog-item__resumo">
@@ -84,7 +84,7 @@
                     </div>
                     <span class="player__tempo">1:41</span>
                     <audio class="player__audio" preload="none">
-                        <source src="/Assests/audios/Como_baixar_sua_conta_de_luz_hoje.m4a" type="audio/mp4">
+                        <source src="../Assests/audios/Como_baixar_sua_conta_de_luz_hoje.m4a" type="audio/mp4">
                     </audio>
                 </div>
             </div>
@@ -92,7 +92,13 @@
 
     </section>
 
-    <script src="/Scripts/blog.js"></script>
+    <script src="../Scripts/blog.js"></script>
+
+
+    <footer class="page-footer">
+      <div><img src="../Assests/logo-lumen-bulb-green.png" alt=""><strong>LU|MEN</strong></div>
+      <p>© 2026 LU|MEN. Todos os direitos reservados. · Hackathon ONE G9 · Alura + Oracle</p>
+    </footer>
 
 </body>
 </html>

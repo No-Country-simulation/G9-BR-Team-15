@@ -1,0 +1,43 @@
+{
+  "kpis": {
+    "total_clientes": 1000,
+    "consumo_total_kwh": 4442162.53,
+    "consumo_medio_kwh": 4442.16,
+    "quantidade_media_equipamentos": 25.3,
+    "tempo_medio_diario_horas": 7.5,
+    "percentual_eficientes": 33.6,
+    "confianca_media_pct": 66.81
+  },
+  "perfil_contagem": [
+    {
+      "categoria": "Moderado",
+      "quantidade": 470
+    },
+    {
+      "categoria": "Eficiente",
+      "quantidade": 336
+    },
+    {
+      "categoria": "Ineficiente",
+      "quantidade": 194
+    }
+  ],
+  "consumo_medio_perfil": [
+    {
+      "categoria": "Eficiente",
+      "consumo_medio_kwh": 2505.63
+    },
+    {
+      "categoria": "Ineficiente",
+      "consumo_medio_kwh": 9126.66
+    },
+    {
+      "categoria": "Moderado",
+      "consumo_medio_kwh": 3892.98
+    }
+  ],
+  "observacoes": {
+    "tempo_medio_diario": "Calculado pela média das horas de uso diário válidas (0–24 h) dos equipamentos por cliente.",
+    "horario_pico": "A base do Modelo Principal não armazena horário de pico. A visualização Consumo × Horário de Pico usa os dados informados no simulador quando disponíveis."
+  }
+}

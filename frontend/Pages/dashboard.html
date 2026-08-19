@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Dashboard LU|MEN com análise energética, indicadores obrigatórios e Data Viz original da equipe.">
+  <title>Dashboard | LU|MEN</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;800&display=swap" rel="stylesheet">
+  <link rel="icon" href="../Assests/logo-lumen-branco.png" type="image/png">
+  <link rel="stylesheet" href="../CSS/Dashboard.css">
+</head>
+<body>
+<script>
+  if (new URLSearchParams(location.search).get('embed') === '1') {
+    document.body.classList.add('embed-mode');
+  }
+</script>
+<header class="navbar">
+  <a class="navbar__logo navbar__brand" href="../index.html" aria-label="Voltar para o início">
+    <img src="../Assests/logo-lumen-bulb-green.png" alt="" class="navbar__brand-icon">
+    <span>LU|MEN</span>
+  </a>
+  <nav aria-label="Navegação principal">
+    <ul class="navbar__links">
+      <li><a href="../index.html">Início</a></li>
+      <li><a href="../index.html#projeto">Projeto</a></li>
+      <li><a href="./blog.html">Blog</a></li>
+      <li><a href="./equipe.html">Equipe</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main class="dashboard-shell">
+  <div class="embed-toolbar" id="embedToolbar">
+    <button type="button" id="embedVoltarSimulador">← Voltar ao simulador</button>
+    <span><img src="../Assests/logo-lumen-bulb-green.png" alt=""> LU|MEN</span>
+  </div>
+  <a class="standalone-back" href="../index.html">← Voltar ao início</a>
+  <section class="dashboard-hero">
+    <div>
+      <p class="eyebrow">⚡ Seu painel LU|MEN</p>
+      <h1>Consumo transformado em decisão.</h1>
+      <p>Veja seu diagnóstico, acompanhe metas de economia e compare seu consumo de forma simples e visual.</p>
+    </div>
+    <div class="hero-chip"><strong>Análise personalizada</strong><span>Consumo · economia · recomendações</span></div>
+  </section>
+
+  <section class="analysis-card" id="analysisCard" hidden>
+    <div class="section-heading">
+      <div>
+        <p class="section-kicker">Resultado da sua análise</p>
+        <h2>Diagnóstico energético</h2>
+      </div>
+      <span class="status status--ok" id="analysisSource">Resultado personalizado</span>
+    </div>
+    <div class="analysis-grid">
+      <div class="profile-card" id="profileCard">
+        <span class="profile-dot"></span>
+        <small>Classificação energética</small>
+        <strong id="categoriaValor">—</strong>
+        <span id="probabilidadeValor">—</span>
+      </div>
+      <div class="metric-card"><small>Consumo informado</small><strong id="consumoValor">—</strong><span>kWh/mês</span></div>
+      <div class="metric-card"><small>Custo estimado</small><strong id="custoValor">—</strong><span>por mês</span></div>
+      <div class="metric-card"><small>Equipamentos</small><strong id="equipamentosValor">—</strong><span>quantidade</span></div>
+      <div class="metric-card"><small>Uso diário</small><strong id="horasValor">—</strong><span>h/dia</span></div>
+      <div class="metric-card"><small>Horário de pico</small><strong id="picoValor">—</strong><span id="picoLegenda">informado no simulador</span></div>
+    </div>
+
+    <div class="analysis-bottom">
+      <article class="recommendation-box">
+        <h3>Recomendações personalizadas</h3>
+        <ul id="recomendacoesLista"></ul>
+      </article>
+      <article class="economy-box">
+        <div class="economy-head"><h3>Meta de economia</h3><strong><span id="reducaoValor">10</span>%</strong></div>
+        <input id="reducaoRange" type="range" min="5" max="30" step="5" value="10">
+        <div class="economy-values"><div><small>Consumo projetado</small><strong id="consumoProjetado">—</strong></div><div><small>Economia mensal</small><strong id="economiaReais">—</strong></div></div>
+      </article>
+    </div>
+  </section>
+
+  <section class="personal-charts-section" id="personalChartsSection" hidden>
+    <div class="section-heading">
+      <div>
+        <p class="section-kicker">Visualização do seu resultado</p>
+        <h2>Seus gráficos de consumo</h2>
+      </div>
+      <span class="status status--ok">Dados desta análise</span>
+    </div>
+    <p class="personal-copy">Os gráficos se ajustam aos dados informados e ajudam a visualizar consumo, metas de economia e evolução do seu perfil energético.</p>
+    <div class="personal-charts-grid">
+      <article class="chart-card">
+        <h3>Seu consumo × média do perfil</h3>
+        <div id="chartClienteComparacao" class="chart"></div>
+      </article>
+      <article class="chart-card">
+        <h3>Consumo atual × meta de economia</h3>
+        <div id="chartClienteProjecao" class="chart"></div>
+      </article>
+      <article class="chart-card">
+        <h3 id="scoreTitulo">Índice da análise</h3>
+        <div id="chartClienteConfianca" class="chart"></div>
+      </article>
+      <article class="chart-card">
+        <h3>Custo atual × custo projetado</h3>
+        <div id="chartClienteCusto" class="chart"></div>
+      </article>
+      <article class="chart-card chart-card--wide">
+        <h3>Histórico mensal do cliente</h3>
+        <div id="chartClienteHistorico" class="chart"></div>
+        <p class="chart-note" id="historicoNota">O histórico mensal fica disponível para perfis cadastrados com registros anteriores.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="gamification-section" id="gamificationSection">
+    <div class="section-heading">
+      <div>
+        <p class="section-kicker">Gamificação</p>
+        <h2>Ranking de eficiência energética</h2>
+      </div>
+      <span class="status" id="rankingStatus">Carregando ranking</span>
+    </div>
+    <p class="gamification-copy">Compare seu desempenho com outros perfis e acompanhe sua evolução por país, estado ou cidade.</p>
+
+    <div class="ranking-toolbar" role="group" aria-label="Escopo do ranking">
+      <button class="ranking-filter is-active" type="button" data-ranking-type="PAIS">Brasil</button>
+      <button class="ranking-filter" type="button" data-ranking-type="ESTADO">Estado</button>
+      <button class="ranking-filter" type="button" data-ranking-type="CIDADE">Cidade</button>
+    </div>
+
+    <div class="gamification-grid">
+      <article class="ranking-card">
+        <div class="ranking-card__head">
+          <div>
+            <small>Comunidade LU|MEN</small>
+            <h3>Top 10 sustentável</h3>
+          </div>
+          <span class="ranking-scope" id="rankingScopeLabel">Brasil</span>
+        </div>
+        <div class="ranking-list" id="rankingList" aria-live="polite"></div>
+      </article>
+
+      <aside class="my-rank-card">
+        <div class="my-rank-icon">★</div>
+        <small>Sua posição</small>
+        <strong id="minhaPosicaoValor">—</strong>
+        <span id="minhaPontuacaoValor">Entre para ver sua pontuação</span>
+        <p id="minhaPosicaoDetalhe">Cadastre-se para acompanhar sua posição e sua evolução no ranking.</p>
+      </aside>
+    </div>
+  </section>
+
+  <details class="dashboard-details dashboard-details--overview" open>
+    <summary>Panorama geral de consumo</summary>
+    <div class="dashboard-details__content">
+  <section class="required-section">
+    <div class="section-heading">
+      <div>
+        <p class="section-kicker">Visão geral da comunidade</p>
+        <h2>Indicadores de consumo</h2>
+      </div>
+      <span class="status status--ok">Dados consolidados</span>
+    </div>
+    <div class="required-kpis">
+      <div class="required-kpi"><span>Total de clientes analisados</span><strong id="kpiClientes">—</strong></div>
+      <div class="required-kpi"><span>Consumo total de energia</span><strong id="kpiConsumoTotal">—</strong><small>kWh</small></div>
+      <div class="required-kpi"><span>Consumo médio por cliente</span><strong id="kpiConsumoMedio">—</strong><small>kWh</small></div>
+      <div class="required-kpi"><span>Quantidade média de equipamentos</span><strong id="kpiEquipamentos">—</strong></div>
+      <div class="required-kpi"><span>Tempo médio diário de utilização</span><strong id="kpiHoras">—</strong><small>h/dia</small></div>
+      <div class="required-kpi"><span>Clientes eficientes</span><strong id="kpiEficientes">—</strong><small>%</small></div>
+    </div>
+  </section>
+
+  <section class="charts-section">
+    <div class="section-heading">
+      <div><p class="section-kicker">Panorama energético</p><h2>Leitura dos padrões de consumo</h2></div>
+    </div>
+    <div class="charts-grid">
+      <article class="chart-card"><h3>Consumo Médio por Perfil Energético</h3><div id="chartConsumoPerfil" class="chart"></div></article>
+      <article class="chart-card"><h3>Distribuição dos Perfis</h3><div id="chartDistribuicao" class="chart"></div></article>
+      <article class="chart-card chart-card--wide"><h3>Consumo × Horário de Pico</h3><div id="chartPico" class="chart"></div><p class="chart-note" id="picoNota">Preencha o simulador para visualizar esta relação com os dados informados pelo cliente.</p></article>
+    </div>
+  </section>
+
+  <section class="original-dashboard-section">
+    <div class="section-heading">
+      <div>
+        <p class="section-kicker">Visão ampliada</p>
+        <h2>Panorama completo</h2>
+      </div>
+      <span class="status status--ok">Dados consolidados</span>
+    </div>
+    
+    <p class="confidence-note">Os indicadores gerais representam o conjunto de análises e podem ser diferentes do seu resultado individual.</p>
+    <div class="original-dashboard-frame-wrap" id="originalDashboardWrap">
+      <iframe class="original-dashboard-frame" id="originalDashboardFrame" src="./dashboard-original.html" title="Dashboard original da equipe" loading="eager" data-original-width="1400" data-original-height="1900"></iframe>
+    </div>
+  </section>
+
+    </div>
+  </details>
+
+  <details class="dashboard-details dashboard-details--official" open>
+    <summary>Acompanhamento personalizado</summary>
+    <div class="dashboard-details__content">
+  <section class="official-section" id="officialSection">
+    <div class="section-heading">
+      <div><p class="section-kicker">Sua conta</p><h2>Acompanhe seu consumo</h2></div>
+      <span class="status" id="apiStatus">Conta LU|MEN</span>
+    </div>
+    <p class="official-copy">Entre para acessar seus perfis cadastrados, recomendações personalizadas e histórico de consumo.</p>
+    <div class="official-grid">
+      <div id="loginArea">
+        <form id="loginForm" class="login-form">
+          <label><span>E-mail</span><input id="loginEmail" type="email" autocomplete="username" placeholder="voce@email.com" required></label>
+          <label><span>Senha</span><input id="loginSenha" type="password" autocomplete="current-password" placeholder="Sua senha" required></label>
+          <button class="btn" type="submit">Entrar</button>
+        </form>
+      </div>
+      <div id="clienteArea" hidden>
+        <p id="usuarioLogado"></p>
+        <label class="client-select"><span>Cliente associado</span><select id="clienteSelect"></select></label>
+        <div class="client-actions"><button class="btn" id="analisarClienteBtn" type="button">Atualizar análise</button><button class="btn btn--ghost" id="sairBtn" type="button">Sair</button></div>
+      </div>
+      <p id="formFeedback" class="feedback" role="status" aria-live="polite"></p>
+    </div>
+  </section>
+    </div>
+  </details>
+</main>
+
+<footer class="footer"><div class="footer__brand"><img src="../Assests/logo-lumen-bulb-white.png" alt=""><strong>LU|MEN</strong></div><p>© 2026 LU|MEN. Todos os direitos reservados. · Hackathon ONE G9 · Alura + Oracle</p></footer>
+
+<script src="https://cdn.plot.ly/plotly-3.3.1.min.js"></script>
+<script src="../Scripts/config.js"></script>
+<script src="../Scripts/dashboard.js"></script>
+<script>
+(function () {
+  const wrap = document.getElementById('originalDashboardWrap');
+  const frame = document.getElementById('originalDashboardFrame');
+  const originalWidth = Number(frame.dataset.originalWidth || 1400);
+  const originalHeight = Number(frame.dataset.originalHeight || 1900);
+  function fitDashboard() {
+    const available = Math.max(280, wrap.clientWidth);
+    const scale = Math.min(1, available / originalWidth);
+    frame.style.width = originalWidth + 'px';
+    frame.style.height = originalHeight + 'px';
+    frame.style.transformOrigin = 'top left';
+    frame.style.transform = `scale(${scale})`;
+    wrap.style.height = Math.ceil(originalHeight * scale) + 'px';
+  }
+  window.addEventListener('resize', fitDashboard, { passive: true });
+  frame.addEventListener('load', fitDashboard);
+  fitDashboard();
+})();
+</script>
+
+<script>
+(function(){
+  const embedded = new URLSearchParams(location.search).get('embed') === '1';
+  if (embedded) {
+    document.querySelectorAll('.dashboard-details').forEach(el => el.removeAttribute('open'));
+  }
+  document.getElementById('embedVoltarSimulador')?.addEventListener('click', () => {
+    if (window.parent && window.parent !== window) {
+      window.parent.postMessage({type:'lumen:voltar-simulador'}, '*');
+    } else {
+      location.href = '/';
+    }
+  });
+})();
+</script>
+</body>
+</html>

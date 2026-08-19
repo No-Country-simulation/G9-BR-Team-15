@@ -8,13 +8,14 @@
 
     <title>LUMEN</title>
 
-    <link rel="stylesheet" href="/CSS/styles.css">
+    <link rel="stylesheet" href="./CSS/styles.css">
+    <link rel="stylesheet" href="./CSS/ajustes.css">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
 
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;800&display=swap" rel="stylesheet">
 
-    <link rel="icon" href="/Assests/logo-lumen-branco.png" type="image/png">
+    <link rel="icon" href="./Assests/logo-lumen-branco.png" type="image/png">
 
 </head>
 
@@ -23,8 +24,10 @@
     <header class="navbar">
 
         <div class="navbar__logo">
-            <img src="/Assests/Logo-Lumen-Verde.png" alt="Logo Lumen" class="navbar__logo-image" width="50" height="50">
-            LU|MEN
+            <a href="./index.html" class="navbar__brand" aria-label="LU|MEN - início">
+                <img src="./Assests/logo-lumen-bulb-green.png" alt="" class="navbar__brand-icon">
+                <span>LU|MEN</span>
+            </a>
         </div>
 
         <nav>
@@ -32,8 +35,8 @@
             <ul class="navbar__links">
 
                 <li><a href="#projeto">Projeto</a></li>
-                <li><a href="/Pages/blog.html">Blog</a></li>
-                <li><a href="/Pages/equipe.html">Equipe</a></li>
+                <li><a href="./Pages/blog.html">Blog</a></li>
+                <li><a href="./Pages/equipe.html">Equipe</a></li>
 
             </ul>
 
@@ -88,14 +91,18 @@
                 metas e recomendações personalizadas.
             </p>
 
-            <div class="hero__buttons">
+            <div class="hero__buttons hero__buttons--plataforma">
 
                 <button class="btn-circle btn-circle--voltar" id="voltarParaSimulador" aria-label="Voltar ao simulador">
                     ←
                 </button>
-                
+
                 <button class="btn-primary btn-primary--azul" data-abrir-modal="modalLogin">
-                    Entrar na plataforma
+                    Entrar
+                </button>
+
+                <button class="btn-link-hero" type="button" data-abrir-modal="modalCadastro">
+                    Criar minha conta
                 </button>
 
             </div>
@@ -121,18 +128,10 @@
             <label for="tipo-imovel">Tipo de imóvel</label>
 
             <select id="tipo-imovel">
-
-                <option>Selecione</option>
-                <option>Residencial</option>
-                <option>Comercial Micro</option>
-                <option>Comercial Pequeno</option>
-                <option>Comercial Médio</option>
-                <option>Comercial Grande</option>
-                <option>Industrial Leve</option>
-                <option>Industrial Pesado</option>
-                <option>Rural</option>
-                <option>Serviço Público</option>
-
+                <option value="">Selecione</option>
+                <option value="Residencial">Residencial</option>
+                <option value="Comercial">Comercial</option>
+                <option value="Industrial">Industrial</option>
             </select>
 
         </div>
@@ -160,13 +159,17 @@
 
             <label for="horas-uso">Horas de uso</label>
 
-            <input type="text" id="horas-uso" placeholder="Ex: 5 horas/dia">
+            <input type="number" id="horas-uso" min="0" max="24" step="0.5" placeholder="Ex: 5">
 
         </div>
 
+        <div class="form-group">
+            <label class="checkbox-row"><input type="checkbox" id="uso-horario-pico"> Uso relevante no horário de pico</label>
+        </div>
         <button class="btn-continuar">
-            Continuar
+            Analisar consumo
         </button>
+        <p id="simuladorFeedback" class="simulador-feedback" role="status" aria-live="polite" hidden></p>
 
     </div>
 
@@ -204,16 +207,10 @@
             <label for="tipo-imovel-cadastro">Tipo de imóvel</label>
 
             <select id="tipo-imovel-cadastro">
-                <option>Selecione</option>
-                <option>Residencial</option>
-                <option>Comercial Micro</option>
-                <option>Comercial Pequeno</option>
-                <option>Comercial Médio</option>
-                <option>Comercial Grande</option>
-                <option>Industrial Leve</option>
-                <option>Industrial Pesado</option>
-                <option>Rural</option>
-                <option>Serviço Público</option>
+                <option value="">Selecione</option>
+                <option value="Residencial">Residencial</option>
+                <option value="Comercial">Comercial</option>
+                <option value="Industrial">Industrial</option>
             </select>
         </div>
 
@@ -261,7 +258,7 @@
 
             <div class="resultado__topo">
                 <div class="resultado__marca">
-                    <img src="/Assests/logo-lumen-branco.png" alt="Logo Lumen" class="resultado__marca-logo">
+                    <img src="./Assests/logo-lumen-bulb-white.png" alt="" class="resultado__marca-logo resultado__marca-logo--bulb">
                     LU|MEN
                 </div>
                 <span class="resultado__titulo-topo">Diagnóstico Energético</span>
@@ -290,6 +287,7 @@
             </div>
 
             <div class="resultado__impacto" id="resultadoImpacto"></div>
+            <small id="resultadoFonte" style="display:block;margin-top:10px;color:rgba(255,255,255,.62)"></small>
 
         </div>
 
@@ -303,6 +301,26 @@
 
     </div>
 
+</div>
+
+
+<div class="modal modal--dashboard" id="modalDashboard" aria-hidden="true">
+    <div class="modal__content modal__content--dashboard" role="dialog" aria-modal="true" aria-label="Dashboard LU|MEN">
+        <div class="dashboard-window__bar">
+            <button type="button" class="dashboard-window__back" id="voltarDashboardSimulador" aria-label="Voltar ao simulador">← Voltar ao simulador</button>
+            <div class="dashboard-window__brand">
+                <img src="./Assests/logo-lumen-bulb-green.png" alt="">
+                <strong>Resultado da análise</strong>
+            </div>
+            <button type="button" class="dashboard-window__close" data-fechar-modal="modalDashboard" aria-label="Fechar dashboard">&times;</button>
+        </div>
+        <iframe
+            id="dashboardFrame"
+            class="dashboard-window__frame"
+            src="./Pages/dashboard.html?embed=1"
+            title="Dashboard LU|MEN">
+        </iframe>
+    </div>
 </div>
 
     <script>
@@ -339,7 +357,7 @@
 
             <article class="card is-active" data-card="1">
                 <div class="card__fundo-identidade"></div>
-                <img src="/Assests/logo-lumen-branco.png" alt="Símbolo Lumen" class="card__logo-identidade">
+                <img src="./Assests/logo-lumen-bulb-white.png" alt="Símbolo LU|MEN" class="card__logo-identidade">
                 <button class="card__toggle" aria-label="Alternar card">+</button>
 
                 <div class="card__conteudo">
@@ -356,7 +374,7 @@
             </article>
 
             <article class="card" data-card="2">
-                <div class="card__imagem" style="background-image:url('/Assests/Component-1.png');"></div>
+                <div class="card__imagem" style="background-image:url('./Assests/Component-1.png');"></div>
                 <div class="card__gradiente"></div>
 
                 <button class="card__toggle" aria-label="Alternar card">+</button>
@@ -375,7 +393,7 @@
             </article>
 
             <article class="card" data-card="3">
-                <div class="card__imagem" style="background-image:url('/Assests/Component-2.png');"></div>
+                <div class="card__imagem" style="background-image:url('./Assests/Component-2.png');"></div>
                 <div class="card__gradiente"></div>
 
                 <button class="card__toggle" aria-label="Alternar card">+</button>
@@ -394,7 +412,7 @@
             </article>
 
             <article class="card" data-card="4">
-                <div class="card__imagem" style="background-image:url('/Assests/Component-3.png');"></div>
+                <div class="card__imagem" style="background-image:url('./Assests/Component-3.png');"></div>
                 <div class="card__gradiente"></div>
 
                 <button class="card__toggle" aria-label="Alternar card">+</button>
@@ -430,7 +448,7 @@
         <div class="bandeiraTarifaria cardFlip" tabindex="0">
             <div class="cardFlip__inner">
                 <div class="cardFlip__face cardFlip__face--frente">
-                    <img src="/Assests/bandeira-tarifaria.jpg" alt="Bandeira tarifária" class="bandeiraTarifaria__imagem">
+                    <img src="./Assests/bandeira-tarifaria.jpg" alt="Bandeira tarifária" class="bandeiraTarifaria__imagem">
                     <h2>Bandeira Tarifária de Agosto</h2>
                 </div>
                 <div class="cardFlip__face cardFlip__face--verso bandeiraTarifaria__verso" data-bandeira="amarela">
@@ -443,7 +461,7 @@
         <div class="quantidadeHidreletricas cardFlip" tabindex="0">
             <div class="cardFlip__inner">
                 <div class="cardFlip__face cardFlip__face--frente">
-                    <img src="/Assests/hidreletrica.jpg" alt="Hidrelétrica" class="quantidadeHidreletricas__imagem">
+                    <img src="./Assests/hidreletrica.jpg" alt="Hidrelétrica" class="quantidadeHidreletricas__imagem">
                     <h2>Quantidade de hidrelétricas</h2>
                 </div>
                 <div class="cardFlip__face cardFlip__face--verso">
@@ -456,7 +474,7 @@
         <div class="quantidadeTermeltricas cardFlip" tabindex="0">
             <div class="cardFlip__inner">
                 <div class="cardFlip__face cardFlip__face--frente">
-                    <img src="/Assests/termeltrica.jpg" alt="Termelétrica" class="quantidadeTermeltricas__imagem">
+                    <img src="./Assests/termeltrica.jpg" alt="Termelétrica" class="quantidadeTermeltricas__imagem">
                     <h2>Quantidade de termelétricas</h2>
                 </div>
                 <div class="cardFlip__face cardFlip__face--verso">
@@ -467,6 +485,15 @@
         </div>
 
     </section>
+
+    <footer class="site-footer">
+        <div class="site-footer__brand">
+            <img src="./Assests/logo-lumen-bulb-white.png" alt="">
+            <strong>LU|MEN</strong>
+        </div>
+        <p>© 2026 LU|MEN. Todos os direitos reservados.</p>
+        <p class="site-footer__meta">Hackathon ONE G9 · Alura + Oracle</p>
+    </footer>
 
     <!-- Modais: abrir, fechar (X, clique fora) -->
     <script>
@@ -576,7 +603,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
-    <script src="/Scripts/script.js"></script>
+    <script src="./Scripts/config.js"></script>
+    <script src="./Scripts/script.js"></script>
 
 </body>
 
